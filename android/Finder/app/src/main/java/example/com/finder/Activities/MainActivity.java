@@ -1,9 +1,12 @@
 package example.com.finder.Activities;
 
-import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import example.com.finder.R;
 
@@ -14,6 +17,8 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        GoToWorkerActivity();
     }
 
 
@@ -38,4 +43,21 @@ public class MainActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
+    public void GoToWorkerActivity ()
+    {
+        Button button = (Button)findViewById(R.id.worker_activity_button);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(MainActivity.this, WorkerActivity.class);
+                MainActivity.this.startActivity(myIntent);
+            }
+        });
+
+    }
+
+
 }
