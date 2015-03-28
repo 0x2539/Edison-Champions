@@ -25,6 +25,11 @@ public class PeopleUtils {
 //        people.add(p);
 //        people.add(p);
 
+        if(people == null)
+        {
+            people = new ArrayList<>();
+        }
+
         return people;
     }
 

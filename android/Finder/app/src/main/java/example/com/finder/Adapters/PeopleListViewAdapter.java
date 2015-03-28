@@ -81,7 +81,7 @@ public class PeopleListViewAdapter extends BaseAdapter {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                DownloadImageTask.getImage(holder.profilePictureImageView, items.get(position).getPictureUrl());
+                DownloadImageTask.getImage(context, holder.profilePictureImageView, items.get(position).getPictureUrl());
             }
         }).start();
 //        holder.theSubtitleTextView.setText("Item #" + position);
