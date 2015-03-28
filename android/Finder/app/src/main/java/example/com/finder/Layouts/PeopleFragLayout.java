@@ -15,7 +15,7 @@ import example.com.finder.Utils.PeopleUtils;
 /**
  * Created by Alexandru on 28-Mar-15.
  */
-public class PeopleListLayout extends BaseFragLayout {
+public class PeopleFragLayout extends BaseFragLayout {
 
     public interface OnPeopleListFragmentListener {
         public void onPersonClicked(int position);

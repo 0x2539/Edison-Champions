@@ -58,7 +58,7 @@ public class PeopleListViewAdapter extends BaseAdapter {
 
             holder = new ViewHolder();
 
-//            holder.theTitleTextView = (TextView) convertView.findViewById(R.id.listview_adapter_title_textview);
+            holder.theTitleTextView = (TextView) convertView.findViewById(R.id.people_item_layout_name_text_view);
 //            holder.theSubtitleTextView = (TextView) convertView.findViewById(R.id.listview_adapter_subtitle_textview);
 
             convertView.setTag(holder);
@@ -66,7 +66,7 @@ public class PeopleListViewAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-//        holder.theTitleTextView.setText(items.get(position));
+        holder.theTitleTextView.setText(items.get(position));
 //        holder.theSubtitleTextView.setText("Item #" + position);
 
         return convertView;
