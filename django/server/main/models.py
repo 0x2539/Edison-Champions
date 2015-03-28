@@ -20,10 +20,13 @@ class User(models.Model):
 
     def mutual_friends(self, other_id):
         graph = facebook.GraphAPI(access_token=self.access_token)
-        return graph.get_connections(
+        friends = graph.get_connections(
             str(other_id), '',
             fields="context.fields(mutual_friends)"
-        )['context']['mutual_friends']['summary']['total_count']
+        )['context']['mutual_friends']
+
+        # TODO: return True if the users are friends
+        return friends['summary']['total_count'], False
 
     def populate_fields(self):
         graph = facebook.GraphAPI(access_token=self.access_token)
