@@ -1,12 +1,20 @@
 package example.com.finder.Activities;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import example.com.finder.R;
 
@@ -18,12 +26,33 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        getKeyHash();
+
         GoToWorkerActivity();
         GoToPeopleActivity();
         GoToFacebookActivity();
         GoToServerActivity();
     }
 
+    private void getKeyHash()
+    {
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(
+                    "example.com.finder",
+                    PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -83,6 +112,7 @@ public class MainActivity extends ActionBarActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.i("main", "in login");
                 Intent myIntent = new Intent(MainActivity.this, LoginActivity.class);
                 MainActivity.this.startActivity(myIntent);
             }
@@ -92,7 +122,7 @@ public class MainActivity extends ActionBarActivity {
 
     public void GoToServerActivity ()
     {
-        Button button = (Button)findViewById(R.id.facebook_activity_button);
+        Button button = (Button)findViewById(R.id.server_activity_button);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
