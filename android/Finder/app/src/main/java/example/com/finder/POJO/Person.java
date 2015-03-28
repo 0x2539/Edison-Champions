@@ -9,6 +9,7 @@ public class Person {
     private String pictureUrl;
     private int mutualFriends;
     private int mutualLikes;
+    private int score;
 
     public String getName() {
         return name;
@@ -48,5 +49,13 @@ public class Person {
 
     public void setPictureUrl(String pictureUrl) {
         this.pictureUrl = pictureUrl;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 }

@@ -28,7 +28,7 @@
 
         <ImageView
             android:id="@+id/people_item_layout_friends_image_view"
-            android:layout_width="wrap_content"
+            android:layout_width="25dp"
             android:layout_height="25dp"
             android:src="@drawable/friends"
             android:layout_below="@+id/people_item_layout_name_text_view"/>
@@ -47,8 +47,8 @@
 
         <ImageView
             android:id="@+id/people_item_layout_likes_image_view"
-            android:layout_width="wrap_content"
-            android:layout_height="25dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:src="@drawable/likes"
             android:layout_marginLeft="20dp"
             android:layout_toRightOf="@+id/people_item_layout_mutual_friends_text_view"
