@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="example.com.finder" >
 
+    <!--Needed for general bluetooth-->
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <!--Needed for bluetooth device discovery-->
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
