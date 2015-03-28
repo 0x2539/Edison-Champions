@@ -8,18 +8,22 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import example.com.finder.Layouts.PeopleFragLayout;
 import example.com.finder.R;
 
 
-public class MainActivity extends ActionBarActivity {
+public class PeopleActivity extends ActionBarActivity implements PeopleFragLayout.OnPeopleListFragmentListener {
+
+    private PeopleFragLayout layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_people);
 
-        GoToWorkerActivity();
-        GoToPeopleActivity();
+        layout = (PeopleFragLayout) getSupportFragmentManager().findFragmentById(R.id.people_fragment);
+//        layout = new PeopleFragLayout();
+//        setContentView(layout);
     }
 
 
@@ -45,34 +49,8 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-    public void GoToWorkerActivity ()
-    {
-        Button button = (Button)findViewById(R.id.worker_activity_button);
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent myIntent = new Intent(MainActivity.this, WorkerActivity.class);
-                MainActivity.this.startActivity(myIntent);
-            }
-        });
+    @Override
+    public void onPersonClicked(int position) {
 
     }
-
-    public void GoToPeopleActivity ()
-    {
-        Button button = (Button)findViewById(R.id.people_activity_button);
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent myIntent = new Intent(MainActivity.this, PeopleActivity.class);
-                MainActivity.this.startActivity(myIntent);
-            }
-        });
-
-    }
-
-
 }
