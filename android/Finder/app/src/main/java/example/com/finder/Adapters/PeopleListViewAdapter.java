@@ -5,11 +5,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
 
+import example.com.finder.Layouts.RoundImageView;
+import example.com.finder.POJO.Person;
 import example.com.finder.R;
+import example.com.finder.Utils.DownloadImageTask;
 
 /**
  * Created by Alexandru on 28-Mar-15.
@@ -23,7 +27,7 @@ public class PeopleListViewAdapter extends BaseAdapter {
     /**
      * The items list.
      */
-    protected List<String> items;
+    protected List<Person> items;
 
     /**
      * The context.
@@ -34,31 +38,36 @@ public class PeopleListViewAdapter extends BaseAdapter {
      * The Class ViewHolder.
      */
     private static class ViewHolder {
-        TextView theTitleTextView;
-        TextView theSubtitleTextView;
+        TextView nameTextView;
+        TextView mutualFriendsTextView;
+        TextView mutualLikesTextView;
+        RoundImageView profilePictureImageView;
     }
 
-    public PeopleListViewAdapter(Context context, List<String> items) {
+    public PeopleListViewAdapter(Context context, List<Person> items) {
         this.context = context;
         this.items = items;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    public void setPeople(List<String> people)
+    public void setPeople(List<Person> people)
     {
         items = people;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        final ViewHolder holder;
 
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.people_item_layout, parent, false);
 
             holder = new ViewHolder();
 
-            holder.theTitleTextView = (TextView) convertView.findViewById(R.id.people_item_layout_name_text_view);
+            holder.nameTextView = (TextView) convertView.findViewById(R.id.people_item_layout_name_text_view);
+            holder.mutualFriendsTextView = (TextView) convertView.findViewById(R.id.people_item_layout_mutual_friends_text_view);
+            holder.mutualLikesTextView = (TextView) convertView.findViewById(R.id.people_item_layout_mutual_likes_text_view);
+            holder.profilePictureImageView = (RoundImageView) convertView.findViewById(R.id.people_item_layout_profile_picture_image_view);
 //            holder.theSubtitleTextView = (TextView) convertView.findViewById(R.id.listview_adapter_subtitle_textview);
 
             convertView.setTag(holder);
@@ -66,7 +75,15 @@ public class PeopleListViewAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.theTitleTextView.setText(items.get(position));
+        holder.nameTextView.setText(items.get(position).getName());
+        holder.mutualFriendsTextView.setText(items.get(position).getMutualFriends() + "");
+        holder.mutualLikesTextView.setText(items.get(position).getMutualLikes() + "");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                DownloadImageTask.getImage(holder.profilePictureImageView, items.get(position).getPictureUrl());
+            }
+        }).start();
 //        holder.theSubtitleTextView.setText("Item #" + position);
 
         return convertView;

@@ -8,8 +8,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+
+import java.util.List;
+
 import example.com.finder.Layouts.PeopleFragLayout;
+import example.com.finder.POJO.Person;
 import example.com.finder.R;
+import example.com.finder.Utils.JSONUtils;
+import example.com.finder.Utils.PeopleUtils;
 
 
 public class PeopleActivity extends ActionBarActivity implements PeopleFragLayout.OnPeopleListFragmentListener {
@@ -22,6 +29,10 @@ public class PeopleActivity extends ActionBarActivity implements PeopleFragLayou
         setContentView(R.layout.activity_people);
 
         layout = (PeopleFragLayout) getSupportFragmentManager().findFragmentById(R.id.people_fragment);
+
+        String json = "";
+
+        PeopleUtils.setPeople(JSONUtils.fromJSON(json, new TypeReference<List<Person>>() { }));
 //        layout = new PeopleFragLayout();
 //        setContentView(layout);
     }
