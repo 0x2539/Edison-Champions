@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse, Http404
 from django.views.generic import View
 from django.views.decorators.csrf import csrf_exempt
@@ -13,8 +13,12 @@ def index(request):
     return JsonResponse({})
 
 class DingView(View):
+    @json_endpoint
     @csrf_exempt
-    def post(self, request):
+    def post(self, request, params):
+        if params.get('mac') is None or not User.objects.filter(mac=params['mac'], near_edison=True).exists():
+            raise Http404
+
         Ding.objects.create()
         return JsonResponse({})
 
@@ -43,33 +47,36 @@ class UserView(View):
 
         user, _ = User.objects.get_or_create(mac=mac)
 
-        user.nearby.clear()
-        for mac in nearby:
-            nearby_user, _ = User.objects.get_or_create(mac=mac)
-            user.nearby.add(nearby_user)
+        if len(nearby) > 0:
+            user.nearby.clear()
+            for mac in nearby:
+                nearby_user, _ = User.objects.get_or_create(mac=mac)
+                user.nearby.add(nearby_user)
 
-        user.friends.clear()
-        for facebook_id in friends:
-            friend, _ = User.objects.get_or_create(facebook_id=facebook_id)
-            user.friends.add(friend)
+        if len(friends) > 0:
+            user.friends.clear()
+            for facebook_id in friends:
+                friend, _ = User.objects.get_or_create(facebook_id=facebook_id)
+                user.friends.add(friend)
 
-        user.likes.clear()
-        for facebook_object in likes:
-            object, _ = FacebookObject.objects.get_or_create(object_id=facebook_object)
-            user.likes.add(object)
+        if len(likes) > 0:
+            user.likes.clear()
+            for facebook_object in likes:
+                object, _ = FacebookObject.objects.get_or_create(object_id=facebook_object)
+                user.likes.add(object)
 
-        user.facebook_id = facebook_id
-        user.name = name
+        if facebook_id:
+            user.facebook_id = facebook_id
+
+        if name:
+            user.name = name
         user.picture = picture
         user.save()
 
         return JsonResponse({})
 
     def get(self, request):
-        try:
-            user = User.objects.get(mac=request.GET['mac'])
-        except:
-            raise Http404
+        user = get_object_or_404(User, mac=request.GET.get('mac'))
         return JsonResponse({
             "mac": user.mac,
             "facebook_id": user.facebook_id,
@@ -79,6 +86,44 @@ class UserView(View):
             "nearby": [ user.mac for user in user.nearby.all() ],
             "likes": [ object.object_id for object in user.likes.all() ],
         })
+
+
+class UsersNearby(View):
+    def get(self, request):
+        if 'mac' not in request.GET:
+            raise Http404
+
+        users = list(User.objects.filter(near_edison=True))
+        current_user = User.objects.get(mac=request.GET['mac'])
+        nearby = []
+
+        for user in users:
+            if user.id == current_user.id:
+                continue
+            user_friends = set(user.friends.all().exclude(facebook_id=None).values_list('facebook_id', flat=True))
+            current_user_friends = set(current_user.friends.all().exclude(facebook_id=None).values_list('facebook_id', flat=True))
+            friends_in_common = user_friends.intersection(current_user_friends) - set([user.facebook_id])
+
+            friends = False
+            if current_user.facebook_id in user_friends:
+                friends = True
+
+            user_likes = set(user.likes.all().values_list('object_id', flat=True))
+            current_user_likes = set(current_user.likes.all().values_list('object_id', flat=True))
+            likes_in_common = current_user_likes.intersection(user_likes)
+
+            score = len(friends_in_common) * settings.RELATED_FRIEND_RATING \
+                + len(likes_in_common) * settings.LIKE_RATING \
+                + int(friends) * settings.FRIEND_RATING
+
+            nearby.append({
+                "name": user.name,
+                "picture": user.picture,
+                "score": score,
+            })
+
+        nearby.sort(key=lambda user: user['score'])
+        return JsonResponse(nearby, safe=False)
 
 
 class UsersNearEdisonView(View):

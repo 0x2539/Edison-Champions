@@ -77,15 +77,6 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.7/howto/static-files/
-
-STATIC_URL = '/static/'
-
-DING_BOOST = 7  # % / ding
-TIME_DECAY = 1  # % / minute
-
-
 LOGGING = {
     'version': 1,
     'handlers': {
@@ -102,3 +93,16 @@ LOGGING = {
         }
     },
 }
+
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/1.7/howto/static-files/
+
+STATIC_URL = '/static/'
+
+DING_BOOST = 7  # % / ding
+TIME_DECAY = 1  # % / minute
+
+LIKE_RATING = 1
+RELATED_FRIEND_RATING = 3
+FRIEND_RATING = 10
