@@ -122,7 +122,7 @@ class UsersNearby(View):
                 "score": score,
             })
 
-        nearby.sort(key=lambda user: user['score'])
+        nearby.sort(key=lambda user: user['score'], reverse=True)
         return JsonResponse(nearby, safe=False)
 
 
