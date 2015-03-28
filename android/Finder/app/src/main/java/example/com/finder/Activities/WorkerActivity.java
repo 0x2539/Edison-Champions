@@ -120,6 +120,7 @@ public class WorkerActivity extends ActionBarActivity {
 
     @Override
     protected void onDestroy() {
+        super.onDestroy();
         unregisterReceiver(mReceiver);
     }
 
