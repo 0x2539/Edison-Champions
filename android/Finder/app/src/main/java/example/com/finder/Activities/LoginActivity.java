@@ -10,13 +10,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphRequestBatch;
+import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.Arrays;
 
@@ -31,8 +38,6 @@ public class LoginActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Log.i("Login", "in login");
-
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
         initFacebookButton();
@@ -43,12 +48,13 @@ public class LoginActivity extends ActionBarActivity {
         callbackManager = CallbackManager.Factory.create();
         LoginButton loginButton = (LoginButton) findViewById(R.id.facebook_login_button);
 
-        loginButton.setReadPermissions(Arrays.asList("public_profile", "user_friends"));
+        loginButton.setReadPermissions(Arrays.asList("public_profile", "user_friends", "user_about_me", "user_likes"));
 
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
                         // App code
+                        Log.i("login", "success");
                     }
 
                     @Override
@@ -65,6 +71,49 @@ public class LoginActivity extends ActionBarActivity {
 
         final Activity context = this;
 
+        GraphRequestBatch batch = new GraphRequestBatch(
+                GraphRequest.newMeRequest(
+                        AccessToken.getCurrentAccessToken(),
+                        new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(
+                                    JSONObject jsonObject,
+                                    GraphResponse response) {
+                                Log.i("myself", jsonObject + "");
+                                // Application code for user
+                            }
+                        }),
+                GraphRequest.newPostRequest(
+                        AccessToken.getCurrentAccessToken(),
+                        "/3003345?fields=context",
+                        null,
+                        new GraphRequest.Callback() {
+                            public void onCompleted(GraphResponse response) {
+                                Log.i("myself2", response + "");
+            /* handle the result */
+                            }
+                        }),
+                GraphRequest.newMyFriendsRequest(
+                        AccessToken.getCurrentAccessToken(),
+                        new GraphRequest.GraphJSONArrayCallback() {
+                            @Override
+                            public void onCompleted(
+                                    JSONArray jsonArray,
+                                    GraphResponse response) {
+                                // Application code for users friends
+                                Log.i("my friends", jsonArray + "");
+                            }
+                        })
+        );
+        batch.addCallback(new GraphRequestBatch.Callback() {
+            @Override
+            public void onBatchCompleted(GraphRequestBatch graphRequests) {
+                // Application code for when the batch finishes
+            }
+        });
+        batch.executeAsync();
+
+        Log.i("token", AccessToken.getCurrentAccessToken().getToken() + "");
 //        loginButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
