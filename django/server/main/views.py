@@ -1,16 +1,16 @@
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 from django.views.generic import View
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.utils import timezone
 from django.db import transaction
 from .models import Ding, User, FacebookObject
+import time
 from .util import json_endpoint
 
 def index(request):
-    return JsonResponse({
-    })
+    return JsonResponse({})
 
 class DingView(View):
     @csrf_exempt
@@ -39,6 +39,7 @@ class UserView(View):
         likes = params.get('likes', [])
         name = params.get('name', '')
         picture = params.get('picture', '')
+        facebook_id = params.get('facebook_id')
 
         user, _ = User.objects.get_or_create(mac=mac)
 
@@ -48,8 +49,8 @@ class UserView(View):
             user.nearby.add(nearby_user)
 
         user.friends.clear()
-        for mac in friends:
-            friend, _ = User.objects.get_or_create(mac=mac)
+        for facebook_id in friends:
+            friend, _ = User.objects.get_or_create(facebook_id=facebook_id)
             user.friends.add(friend)
 
         user.likes.clear()
@@ -57,6 +58,7 @@ class UserView(View):
             object, _ = FacebookObject.objects.get_or_create(object_id=facebook_object)
             user.likes.add(object)
 
+        user.facebook_id = facebook_id
         user.name = name
         user.picture = picture
         user.save()
@@ -64,9 +66,13 @@ class UserView(View):
         return JsonResponse({})
 
     def get(self, request):
-        user = User.objects.get(mac=request.GET['mac'])
+        try:
+            user = User.objects.get(mac=request.GET['mac'])
+        except:
+            raise Http404
         return JsonResponse({
             "mac": user.mac,
+            "facebook_id": user.facebook_id,
             "name": user.name,
             "picture": user.picture,
             "friends": [ friend.mac for friend in user.friends.all() ],
@@ -91,12 +97,24 @@ class UsersNearEdisonView(View):
 
 class LevelView(View):
     def get(self, request):
-        num_dings = Ding.objects.all().count()
-        oldest_ding = Ding.objects.order_by('created_at')[0]
-        num_minutes = (timezone.now() - oldest_ding.created_at).total_seconds() / 60
+        ding_times = map(
+            lambda created_at: int(time.mktime(created_at.timetuple()) / 60),
+            Ding.objects.all().order_by('created_at').values_list('created_at', flat=True)
+        )
 
-        level = settings.DING_BOOST * num_dings - settings.TIME_DECAY * num_minutes
+        level = 0
+        prev_ding_time = None
+
+        for ding_time in ding_times:
+            if prev_ding_time:
+                level = max(0, level - settings.TIME_DECAY * (ding_time - prev_ding_time))
+            level = min(100, level + settings.DING_BOOST)
+            prev_ding_time = ding_time
+
+        now_timestamp_minutes = int(time.mktime(timezone.now().timetuple()) / 60)
+        if level > 0:
+            level = max(0, level - (now_timestamp_minutes - ding_times[-1]) * settings.TIME_DECAY)
 
         return JsonResponse({
-            "level": min(100, max(0, level)),
+            "level": level,
         })
