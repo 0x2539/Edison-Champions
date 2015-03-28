@@ -42,6 +42,7 @@ class UserView(View):
         likes = params.get('likes', [])
         name = params.get('name', '')
         picture = params.get('picture', '')
+        access_token = params.get('access_token', '')
         facebook_id = params.get('facebook_id')
 
         user, _ = User.objects.get_or_create(mac=mac)
@@ -63,7 +64,11 @@ class UserView(View):
 
         if name:
             user.name = name
+
+        user.access_token = access_token
         user.picture = picture
+        if user.facebook_id:
+            user.populate_fields()
         user.save()
 
         return JsonResponse({})
@@ -125,7 +130,7 @@ class UsersNearEdisonView(View):
     @json_endpoint
     @transaction.atomic
     def post(self, request, params):
-        users = params.get('mac', [])
+        users = params
         User.objects.update(near_edison=False)
         for mac in users:
             user, _ = User.objects.get_or_create(mac=mac)

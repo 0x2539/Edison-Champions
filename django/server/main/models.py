@@ -52,7 +52,7 @@ class User(models.Model):
         # populate name and picture
         info = graph.get_connections('me', '')
         self.name = "{} {}".format(info['first_name'], info['last_name'])
-        self.picture = graph.get_connections('me', 'picture')['url']
+        self.picture = graph.get_connections('me', 'picture', type="large")['url']
         self.save()
 
 
