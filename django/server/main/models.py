@@ -6,7 +6,8 @@ class Ding(models.Model):
 
 
 class User(models.Model):
-    mac = models.CharField(max_length=32, primary_key=True)
+    mac = models.CharField(max_length=32, unique=True, null=True, blank=True)
+    facebook_id = models.CharField(max_length=64, unique=True, null=True, blank=True)
     likes = models.ManyToManyField('FacebookObject')
     friends = models.ManyToManyField('self')
     picture = models.URLField()
