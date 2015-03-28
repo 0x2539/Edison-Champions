@@ -102,7 +102,13 @@ class UsersNearby(View):
                 continue
             user_friends = set(user.friends.all().exclude(facebook_id=None).values_list('facebook_id', flat=True))
             current_user_friends = set(current_user.friends.all().exclude(facebook_id=None).values_list('facebook_id', flat=True))
-            friends_in_common = user_friends.intersection(current_user_friends) - set([user.facebook_id])
+
+            try:
+                num_mutual_friends = user.mutual_friends(user.facebook_id)
+            except:
+                num_mutual_friends = 0
+
+            print "Mutual friends:", num_mutual_friends
 
             friends = False
             if current_user.facebook_id in user_friends:
@@ -112,14 +118,17 @@ class UsersNearby(View):
             current_user_likes = set(current_user.likes.all().values_list('object_id', flat=True))
             likes_in_common = current_user_likes.intersection(user_likes)
 
-            score = len(friends_in_common) * settings.RELATED_FRIEND_RATING \
+            score = num_mutual_friends * settings.RELATED_FRIEND_RATING \
                 + len(likes_in_common) * settings.LIKE_RATING \
                 + int(friends) * settings.FRIEND_RATING
 
             nearby.append({
+                "id": user.facebook_id,
                 "name": user.name,
-                "picture": user.picture,
+                "pictureUrl": user.picture,
                 "score": score,
+                "mutualFriends": num_mutual_friends,
+                "mutualLikes": len(likes_in_common),
             })
 
         nearby.sort(key=lambda user: user['score'], reverse=True)
