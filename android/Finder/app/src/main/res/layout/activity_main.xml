@@ -19,5 +19,21 @@
         android:layout_below="@+id/worker_activity_button"
         android:text="go to people"/>
 
+    <Button
+        android:id="@+id/facebook_activity_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/people_activity_button"
+        android:text="go to facebook"/>
+
+    <Button
+        android:id="@+id/server_activity_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/facebook_activity_button"
+        android:text="go to server"/>
+
 
 </RelativeLayout>

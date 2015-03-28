@@ -20,6 +20,8 @@ public class MainActivity extends ActionBarActivity {
 
         GoToWorkerActivity();
         GoToPeopleActivity();
+        GoToFacebookActivity();
+        GoToServerActivity();
     }
 
 
@@ -68,6 +70,34 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Intent myIntent = new Intent(MainActivity.this, PeopleActivity.class);
+                MainActivity.this.startActivity(myIntent);
+            }
+        });
+
+    }
+
+    public void GoToFacebookActivity ()
+    {
+        Button button = (Button)findViewById(R.id.facebook_activity_button);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(MainActivity.this, LoginActivity.class);
+                MainActivity.this.startActivity(myIntent);
+            }
+        });
+
+    }
+
+    public void GoToServerActivity ()
+    {
+        Button button = (Button)findViewById(R.id.facebook_activity_button);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(MainActivity.this, ServerActivity.class);
                 MainActivity.this.startActivity(myIntent);
             }
         });
