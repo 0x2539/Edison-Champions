@@ -74,7 +74,7 @@ public class PeopleFragLayout extends BaseFragLayout {
         }
     }
 
-    private void updateView()
+    public void updateView()
     {
         if (peopleListItemAdapter == null)
         {

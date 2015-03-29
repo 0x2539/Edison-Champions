@@ -1,5 +1,6 @@
 package example.com.finder.Utils;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -33,10 +34,15 @@ public abstract class DownloadImageTask {//extends AsyncTask<String, Void, Bitma
         }
     }
 
-    public static void getImage(ImageView imageView, String imageUrl) {
+    public static void getImage(Context context, final ImageView imageView, final String imageUrl) {
         if(profilePictures.get(imageUrl) != null)
         {
-            imageView.setImageBitmap(profilePictures.get(imageUrl));
+            ((Activity)context).runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    imageView.setImageBitmap(profilePictures.get(imageUrl));
+                }
+            });
             return;
         }
         try {
@@ -49,14 +55,19 @@ public abstract class DownloadImageTask {//extends AsyncTask<String, Void, Bitma
 
             URL img_value = null;
             img_value = new URL(imageUrl);
-            Bitmap bitmap = BitmapFactory.decodeStream(img_value.openConnection().getInputStream());
+            final Bitmap bitmap = BitmapFactory.decodeStream(img_value.openConnection().getInputStream());
 
 //            Bitmap bitmap = downloadImage(imageUrl);
 
             if (bitmap != null) {
                 profilePictures.put(imageUrl, bitmap);
                 Log.i("getImage", "insert in db");
-                imageView.setImageBitmap(bitmap);
+                ((Activity)context).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        imageView.setImageBitmap(bitmap);
+                    }
+                });
             }
         } catch (Exception e) {
             e.printStackTrace();
