@@ -98,7 +98,7 @@ class UsersNearby(View):
         if 'mac' not in request.GET:
             raise Http404
 
-        users = list(User.objects.filter(near_edison=True))
+        users = list(User.objects.filter(near_edison=True).exclude(name=None).exclude(name=''))
         current_user = User.objects.get(mac=request.GET['mac'])
         yos_sent = current_user.yos.values_list('facebook_id', flat=True)
         yos_received = current_user.yos_received.values_list('facebook_id', flat=True)
