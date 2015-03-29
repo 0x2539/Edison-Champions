@@ -11,11 +11,22 @@
         android:layout_marginLeft="10dp"
         android:layout_centerVertical="true"/>
 
+    <ImageView
+        android:id="@+id/people_item_layout_yo_status_image_view"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:layout_centerVertical="true"
+        android:src="@drawable/yellow"/>
+
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"
+        android:layout_toLeftOf="@+id/people_item_layout_yo_status_image_view"
         android:layout_toRightOf="@+id/people_item_layout_profile_picture_image_view">
 
         <TextView

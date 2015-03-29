@@ -118,6 +118,7 @@ public class PeopleActivity extends ActionBarActivity implements PeopleFragLayou
 
     @Override
     public void onPersonClicked(int position) {
+        PeopleUtils.setCurrentPersonIndex(position);
         Intent myIntent = new Intent(PeopleActivity.this, PersonDetailActivity.class);
         PeopleActivity.this.startActivity(myIntent);
     }

@@ -5,12 +5,20 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import example.com.finder.Adapters.LikesListViewAdapter;
+import example.com.finder.POJO.Person;
 import example.com.finder.R;
+import example.com.finder.Utils.NetUtils;
 import example.com.finder.Utils.PeopleUtils;
+import example.com.finder.Utils.SharedPreferencesUtils;
 
 /**
  * Created by Alexandru on 28-Mar-15.
@@ -26,6 +34,9 @@ public class PersonDetailFragLayout extends BaseFragLayout {
     private OnPeopleListFragmentListener listener;
     private View view;
     protected ListView peopleListView;
+    private Button yoButton;
+    private TextView gotYOedTextView;
+    private ImageView profilePictureImageView;
 
     private TextView noPeopleTextView;
 
@@ -59,6 +70,42 @@ public class PersonDetailFragLayout extends BaseFragLayout {
         try {
             //noPeopleTextView = (TextView) view.findViewById(R.id.);
             peopleListView = (ListView) view.findViewById(R.id.person_detail_likes_listview);
+            profilePictureImageView = (ImageView) view.findViewById(R.id.person_detail_profile_picture_imageview);
+            gotYOedTextView = (TextView) view.findViewById(R.id.person_detail_you_got_yoed_textview);
+            yoButton = (Button) view.findViewById(R.id.person_detail_yo_button);
+            yoButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String POST_URL = "http://192.168.1.153:8000/yo/";
+                    List<String> keys = new ArrayList<>();
+                    List<String> values = new ArrayList<>();
+                    keys.add("facebook_id");
+                    keys.add("target_facebook_id");
+                    values.add(SharedPreferencesUtils.getFacebookUserId(context));
+                    values.add(PeopleUtils.getPeople().get(PeopleUtils.getCurrentPersonIndex()).getId());
+                    NetUtils.PostData(keys, values, POST_URL);
+                }
+            });
+
+            if(PeopleUtils.getPeople().get(PeopleUtils.getCurrentPersonIndex()).isSentYo())
+            {
+                yoButton.setVisibility(View.GONE);
+            }
+            else
+            {
+                yoButton.setVisibility(View.VISIBLE);
+            }
+            if(PeopleUtils.getPeople().get(PeopleUtils.getCurrentPersonIndex()).isReceivedYo())
+            {
+                gotYOedTextView.setVisibility(View.VISIBLE);
+            }
+            else
+            {
+                gotYOedTextView.setVisibility(View.GONE);
+            }
+
+            profilePictureImageView.requestFocus();
+            peopleListView.setFocusable(false);
             updateView();
         }
         catch (Exception e)

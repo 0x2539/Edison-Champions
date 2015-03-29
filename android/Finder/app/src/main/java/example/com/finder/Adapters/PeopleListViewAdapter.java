@@ -42,6 +42,7 @@ public class PeopleListViewAdapter extends BaseAdapter {
         TextView mutualFriendsTextView;
         TextView mutualLikesTextView;
         RoundImageView profilePictureImageView;
+        ImageView yoStatusImageView;
     }
 
     public PeopleListViewAdapter(Context context, List<Person> items) {
@@ -68,6 +69,7 @@ public class PeopleListViewAdapter extends BaseAdapter {
             holder.mutualFriendsTextView = (TextView) convertView.findViewById(R.id.people_item_layout_mutual_friends_text_view);
             holder.mutualLikesTextView = (TextView) convertView.findViewById(R.id.people_item_layout_mutual_likes_text_view);
             holder.profilePictureImageView = (RoundImageView) convertView.findViewById(R.id.people_item_layout_profile_picture_image_view);
+            holder.yoStatusImageView = (ImageView) convertView.findViewById(R.id.people_item_layout_yo_status_image_view);
 //            holder.theSubtitleTextView = (TextView) convertView.findViewById(R.id.listview_adapter_subtitle_textview);
 
             convertView.setTag(holder);
@@ -84,6 +86,25 @@ public class PeopleListViewAdapter extends BaseAdapter {
                 DownloadImageTask.getImage(context, holder.profilePictureImageView, items.get(position).getPictureUrl());
             }
         }).start();
+
+        holder.yoStatusImageView.setVisibility(View.VISIBLE);
+        if(items.get(position).isReceivedYo() && items.get(position).isSentYo())
+        {
+            holder.yoStatusImageView.setImageDrawable(context.getResources().getDrawable(R.drawable.green));
+        }
+        else
+        if(items.get(position).isReceivedYo())
+        {
+            holder.yoStatusImageView.setImageDrawable(context.getResources().getDrawable(R.drawable.yellow));
+        }
+        else
+        if(items.get(position).isSentYo())
+        {
+            holder.yoStatusImageView.setImageDrawable(context.getResources().getDrawable(R.drawable.gray));
+        }
+        else {
+            holder.yoStatusImageView.setVisibility(View.GONE);
+        }
 //        holder.theSubtitleTextView.setText("Item #" + position);
 
         return convertView;

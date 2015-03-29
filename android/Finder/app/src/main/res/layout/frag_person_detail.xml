@@ -3,25 +3,53 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/person_detail_profile_picture_imageview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_launcher"/>
+        android:src="@drawable/ic_launcher"
+        android:adjustViewBounds="true"/>
+
+    <TextView
+        android:id="@+id/person_detail_you_got_yoed_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:text="You got YOed!!"
+        android:textColor="@android:color/black"
+        android:layout_alignLeft="@+id/person_detail_info_container"
+        android:layout_below="@+id/person_detail_info_container"/>
 
     <RelativeLayout
         android:id="@+id/person_detail_info_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
         android:layout_below="@+id/person_detail_profile_picture_imageview">
 
+        <Button
+            android:id="@+id/person_detail_yo_button"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:textSize="40sp"
+            android:text="YO!"
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@+id/person_detail_container_right"/>
 
         <RelativeLayout
             android:id="@+id/person_detail_container_left"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true">
             <TextView
                 android:id="@+id/person_detail_mutual_friends_left_textivew"
                 android:layout_width="wrap_content"
@@ -35,7 +63,8 @@
                 android:textSize="20sp"
                 android:text="Mutual likes:"
                 android:layout_below="@id/person_detail_mutual_friends_left_textivew"/>
-            </RelativeLayout>
+
+        </RelativeLayout>
 
 
 
@@ -44,7 +73,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_toRightOf="@id/person_detail_container_left">
+            android:layout_toRightOf="@id/person_detail_container_left"
+            android:layout_centerVertical="true">
             <TextView
                 android:id="@+id/person_detail_mutual_friends_right_textivew"
                 android:layout_width="wrap_content"
@@ -65,9 +95,9 @@
     <ListView
         android:id="@+id/person_detail_likes_listview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/person_detail_info_container"
+        android:layout_height="380dp"
+        android:layout_below="@+id/person_detail_you_got_yoed_textview"
         android:layout_marginTop="20dp"/>
-
-
+        </RelativeLayout>
+    </ScrollView>
 </RelativeLayout>

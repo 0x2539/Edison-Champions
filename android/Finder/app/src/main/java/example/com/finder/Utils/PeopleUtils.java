@@ -11,6 +11,7 @@ import example.com.finder.POJO.Person;
  */
 public class PeopleUtils {
     private static List<Person> people;
+    private static int currentPersonIndex;
 
     private static List<Like> likes;
 
@@ -59,5 +60,13 @@ public class PeopleUtils {
     public static void setLikes(List<Like> likes) {
         // TODO: this
         PeopleUtils.likes = likes;
+    }
+
+    public static int getCurrentPersonIndex() {
+        return currentPersonIndex;
+    }
+
+    public static void setCurrentPersonIndex(int currentPersonIndex) {
+        PeopleUtils.currentPersonIndex = currentPersonIndex;
     }
 }

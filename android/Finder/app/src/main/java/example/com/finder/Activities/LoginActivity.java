@@ -24,10 +24,21 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import example.com.finder.R;
 import example.com.finder.Utils.SharedPreferencesUtils;
@@ -145,9 +156,47 @@ public class LoginActivity extends ActionBarActivity {
     {
         Log.i("login", "logged in");
         SharedPreferencesUtils.addFacebookData(this, AccessToken.getCurrentAccessToken().getUserId(), AccessToken.getCurrentAccessToken().getToken(), getBluetoothMacAddress());
-        Intent myIntent = new Intent(LoginActivity.this, ServerActivity.class);
+        PostData();
+        Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
         LoginActivity.this.startActivity(myIntent);
     }
+
+    private void PostData()
+    {
+        final Context context = this;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                final String POST_URL = "http://192.168.1.153:8000/user/";
+
+                HttpClient client = new DefaultHttpClient();
+                HttpPost post = new HttpPost(POST_URL);
+
+                try {
+                    // Add your data
+                    List<NameValuePair> nameValuePairs = new ArrayList<>();
+                    // TODO: add name, pic url etc here
+                    nameValuePairs.add(new BasicNameValuePair("mac", SharedPreferencesUtils.getFacebookMacAddress(context)));
+                    nameValuePairs.add(new BasicNameValuePair("access_token", SharedPreferencesUtils.getFacebookAccessToken(context)));
+                    nameValuePairs.add(new BasicNameValuePair("facebook_id", SharedPreferencesUtils.getFacebookUserId(context)));
+                    post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                    // Execute HTTP Post Request
+                    HttpResponse response = client.execute(post);
+
+                    //TODO: check if response is good
+
+                } catch (ClientProtocolException e) {
+                    Log.e("server", "Client protocol ex");
+                } catch (IOException e) {
+                    Log.e("server", "io ex");
+                }
+
+            }
+        }).start();
+    }
+
 
     public String getBluetoothMacAddress() {
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
