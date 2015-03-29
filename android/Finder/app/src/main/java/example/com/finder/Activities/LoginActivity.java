@@ -1,6 +1,7 @@
 package example.com.finder.Activities;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.View;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
+import com.facebook.FacebookActivity;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
@@ -28,6 +30,7 @@ import org.json.JSONObject;
 import java.util.Arrays;
 
 import example.com.finder.R;
+import example.com.finder.Utils.SharedPreferencesUtils;
 
 
 public class LoginActivity extends ActionBarActivity {
@@ -54,7 +57,7 @@ public class LoginActivity extends ActionBarActivity {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
                         // App code
-                        Log.i("login", "success");
+                        signIn();
                     }
 
                     @Override
@@ -71,49 +74,64 @@ public class LoginActivity extends ActionBarActivity {
 
         final Activity context = this;
 
-        GraphRequestBatch batch = new GraphRequestBatch(
-                GraphRequest.newMeRequest(
-                        AccessToken.getCurrentAccessToken(),
-                        new GraphRequest.GraphJSONObjectCallback() {
-                            @Override
-                            public void onCompleted(
-                                    JSONObject jsonObject,
-                                    GraphResponse response) {
-                                Log.i("myself", jsonObject + "");
-                                // Application code for user
-                            }
-                        }),
-                GraphRequest.newPostRequest(
-                        AccessToken.getCurrentAccessToken(),
-                        "/3003345?fields=context",
-                        null,
-                        new GraphRequest.Callback() {
-                            public void onCompleted(GraphResponse response) {
-                                Log.i("myself2", response + "");
-            /* handle the result */
-                            }
-                        }),
-                GraphRequest.newMyFriendsRequest(
-                        AccessToken.getCurrentAccessToken(),
-                        new GraphRequest.GraphJSONArrayCallback() {
-                            @Override
-                            public void onCompleted(
-                                    JSONArray jsonArray,
-                                    GraphResponse response) {
-                                // Application code for users friends
-                                Log.i("my friends", jsonArray + "");
-                            }
-                        })
-        );
-        batch.addCallback(new GraphRequestBatch.Callback() {
-            @Override
-            public void onBatchCompleted(GraphRequestBatch graphRequests) {
-                // Application code for when the batch finishes
+        try {
+            if (AccessToken.getCurrentAccessToken() != null) {
+                signIn();
             }
-        });
-        batch.executeAsync();
+            else
+            {
+                Log.i("login", "logged out");
+            }
+        }
+        catch (Exception e)
+        {
+            Log.i("login", "logged out");
+            e.printStackTrace();
+        }
 
-        Log.i("token", AccessToken.getCurrentAccessToken().getToken() + "");
+//        GraphRequestBatch batch = new GraphRequestBatch(
+//                GraphRequest.newMeRequest(
+//                        AccessToken.getCurrentAccessToken(),
+//                        new GraphRequest.GraphJSONObjectCallback() {
+//                            @Override
+//                            public void onCompleted(
+//                                    JSONObject jsonObject,
+//                                    GraphResponse response) {
+//                                Log.i("myself", jsonObject + "");
+//                                // Application code for user
+//                            }
+//                        }),
+//                GraphRequest.newPostRequest(
+//                        AccessToken.getCurrentAccessToken(),
+//                        "/3003345?fields=context",
+//                        null,
+//                        new GraphRequest.Callback() {
+//                            public void onCompleted(GraphResponse response) {
+//                                Log.i("myself2", response + "");
+//            /* handle the result */
+//                            }
+//                        }),
+//                GraphRequest.newMyFriendsRequest(
+//                        AccessToken.getCurrentAccessToken(),
+//                        new GraphRequest.GraphJSONArrayCallback() {
+//                            @Override
+//                            public void onCompleted(
+//                                    JSONArray jsonArray,
+//                                    GraphResponse response) {
+//                                // Application code for users friends
+//                                Log.i("my friends", jsonArray + "");
+//                            }
+//                        })
+//        );
+//        batch.addCallback(new GraphRequestBatch.Callback() {
+//            @Override
+//            public void onBatchCompleted(GraphRequestBatch graphRequests) {
+//                // Application code for when the batch finishes
+//            }
+//        });
+//        batch.executeAsync();
+
+        //Log.i("token", AccessToken.getCurrentAccessToken().getToken() + "");
 //        loginButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -121,6 +139,26 @@ public class LoginActivity extends ActionBarActivity {
 //                LoginManager.getInstance().logInWithReadPermissions(context, Arrays.asList("public_profile", "user_friends"));
 //            }
 //        });
+    }
+
+    private void signIn()
+    {
+        Log.i("login", "logged in");
+        SharedPreferencesUtils.addFacebookData(this, AccessToken.getCurrentAccessToken().getUserId(), AccessToken.getCurrentAccessToken().getToken(), getBluetoothMacAddress());
+        Intent myIntent = new Intent(LoginActivity.this, ServerActivity.class);
+        LoginActivity.this.startActivity(myIntent);
+    }
+
+    public String getBluetoothMacAddress() {
+        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        // if device does not support Bluetooth
+        if(mBluetoothAdapter==null){
+            Log.d("loginactivity","device does not support bluetooth");
+            return null;
+        }
+
+        return mBluetoothAdapter.getAddress();
     }
 
     @Override
