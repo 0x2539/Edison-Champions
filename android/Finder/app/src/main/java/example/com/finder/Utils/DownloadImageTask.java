@@ -51,6 +51,10 @@ public abstract class DownloadImageTask {//extends AsyncTask<String, Void, Bitma
             desiredWidth = 440;
             desiredHeight = 294;
 
+            if(imageUrl.equals(""))
+            {
+                return;
+            }
             Log.i("getImage", "url " + imageUrl);
 
             URL img_value = null;

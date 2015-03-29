@@ -16,6 +16,7 @@ import java.util.List;
 import example.com.finder.Adapters.LikesListViewAdapter;
 import example.com.finder.POJO.Person;
 import example.com.finder.R;
+import example.com.finder.Utils.DownloadImageTask;
 import example.com.finder.Utils.NetUtils;
 import example.com.finder.Utils.PeopleUtils;
 import example.com.finder.Utils.SharedPreferencesUtils;
@@ -84,6 +85,12 @@ public class PersonDetailFragLayout extends BaseFragLayout {
                     values.add(SharedPreferencesUtils.getFacebookUserId(context));
                     values.add(PeopleUtils.getPeople().get(PeopleUtils.getCurrentPersonIndex()).getId());
                     NetUtils.PostData(keys, values, POST_URL);
+
+                    Person p = PeopleUtils.getPeople().get(PeopleUtils.getCurrentPersonIndex());
+                    p.setSentYo(true);
+
+                    PeopleUtils.getPeople().set(PeopleUtils.getCurrentPersonIndex(), p);
+                    yoButton.setVisibility(View.GONE);
                 }
             });
 
@@ -105,6 +112,12 @@ public class PersonDetailFragLayout extends BaseFragLayout {
             }
 
             profilePictureImageView.requestFocus();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    DownloadImageTask.getImage(context, profilePictureImageView, PeopleUtils.getPeople().get(PeopleUtils.getCurrentPersonIndex()).getPictureUrl());
+                }
+            }).start();
             peopleListView.setFocusable(false);
             updateView();
         }

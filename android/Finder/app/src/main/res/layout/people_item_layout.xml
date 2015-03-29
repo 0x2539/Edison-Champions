@@ -54,6 +54,7 @@
             android:layout_toRightOf="@+id/people_item_layout_friends_image_view"
             android:layout_alignTop="@+id/people_item_layout_friends_image_view"
             android:layout_alignBottom="@+id/people_item_layout_friends_image_view"
+            android:layout_marginLeft="10dp"
             android:text="10"/>
 
         <ImageView
@@ -75,6 +76,7 @@
             android:layout_toRightOf="@+id/people_item_layout_likes_image_view"
             android:layout_alignTop="@+id/people_item_layout_likes_image_view"
             android:layout_alignBottom="@+id/people_item_layout_likes_image_view"
+            android:layout_marginLeft="10dp"
             android:text="11"/>
 
     </RelativeLayout>

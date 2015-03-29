@@ -1,7 +1,9 @@
 package example.com.finder.Utils;
 
 import android.app.ProgressDialog;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
+import android.util.Log;
 
 /**
  * Created by Alexandru on 29-Mar-15.
@@ -21,5 +23,18 @@ public class ViewUtils {
         });
         th.start();
 
+    }
+
+
+    public static String getBluetoothMacAddress() {
+        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        // if device does not support Bluetooth
+        if(mBluetoothAdapter==null){
+            Log.d("loginactivity", "device does not support bluetooth");
+            return null;
+        }
+
+        return mBluetoothAdapter.getAddress();
     }
 }

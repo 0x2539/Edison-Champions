@@ -42,6 +42,7 @@ import java.util.List;
 
 import example.com.finder.R;
 import example.com.finder.Utils.SharedPreferencesUtils;
+import example.com.finder.Utils.ViewUtils;
 
 
 public class LoginActivity extends ActionBarActivity {
@@ -155,7 +156,7 @@ public class LoginActivity extends ActionBarActivity {
     private void signIn()
     {
         Log.i("login", "logged in");
-        SharedPreferencesUtils.addFacebookData(this, AccessToken.getCurrentAccessToken().getUserId(), AccessToken.getCurrentAccessToken().getToken(), getBluetoothMacAddress());
+        SharedPreferencesUtils.addFacebookData(this, AccessToken.getCurrentAccessToken().getUserId(), AccessToken.getCurrentAccessToken().getToken(), ViewUtils.getBluetoothMacAddress());
         PostData();
         Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
         myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -196,19 +197,6 @@ public class LoginActivity extends ActionBarActivity {
 
             }
         }).start();
-    }
-
-
-    public String getBluetoothMacAddress() {
-        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-
-        // if device does not support Bluetooth
-        if(mBluetoothAdapter==null){
-            Log.d("loginactivity","device does not support bluetooth");
-            return null;
-        }
-
-        return mBluetoothAdapter.getAddress();
     }
 
     @Override
