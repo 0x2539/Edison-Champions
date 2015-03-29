@@ -158,6 +158,7 @@ public class LoginActivity extends ActionBarActivity {
         SharedPreferencesUtils.addFacebookData(this, AccessToken.getCurrentAccessToken().getUserId(), AccessToken.getCurrentAccessToken().getToken(), getBluetoothMacAddress());
         PostData();
         Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
+        myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         LoginActivity.this.startActivity(myIntent);
     }
 
