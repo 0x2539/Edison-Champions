@@ -5,18 +5,17 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import example.com.finder.Adapters.PeopleListViewAdapter;
+import example.com.finder.Adapters.LikesListViewAdapter;
 import example.com.finder.R;
 import example.com.finder.Utils.PeopleUtils;
 
 /**
  * Created by Alexandru on 28-Mar-15.
  */
-public class PeopleFragLayout extends BaseFragLayout {
+public class PersonDetailFragLayout extends BaseFragLayout {
 
     public interface OnPeopleListFragmentListener {
         public void onPersonClicked(int position);
@@ -30,7 +29,7 @@ public class PeopleFragLayout extends BaseFragLayout {
 
     private TextView noPeopleTextView;
 
-    private PeopleListViewAdapter peopleListItemAdapter;
+    private LikesListViewAdapter likesListItemAdapter;
 
     @Override
     public void onAttach(Activity activity)
@@ -49,7 +48,7 @@ public class PeopleFragLayout extends BaseFragLayout {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        view = inflater.inflate(R.layout.frag_people, container, false);
+        view = inflater.inflate(R.layout.frag_person_detail, container, false);
         initAll();
 
         return view;
@@ -60,30 +59,24 @@ public class PeopleFragLayout extends BaseFragLayout {
         try {
             noPeopleTextView = (TextView) view.findViewById(R.id.frag_people_empty_text_view);
             peopleListView = (ListView) view.findViewById(R.id.frag_people_list_view);
-            peopleListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    listener.onPersonClicked(position);
-                }
-            });
             updateView();
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+
         }
     }
 
     private void updateView()
     {
-        if (peopleListItemAdapter == null)
+        if (likesListItemAdapter == null)
         {
-            peopleListItemAdapter = new PeopleListViewAdapter(context,
-                    PeopleUtils.getPeople());
-            peopleListView.setAdapter(peopleListItemAdapter);
+            likesListItemAdapter = new LikesListViewAdapter(context,
+                    PeopleUtils.getLikes());
+            peopleListView.setAdapter(likesListItemAdapter);
         } else
         {
-            peopleListItemAdapter.setPeople(PeopleUtils.getPeople());
+            likesListItemAdapter.setPeople(PeopleUtils.getLikes());
         }
 
         if(noPeopleTextView != null) {
@@ -92,7 +85,7 @@ public class PeopleFragLayout extends BaseFragLayout {
             } else {
                 noPeopleTextView.setVisibility(View.GONE);
             }
-            peopleListItemAdapter.notifyDataSetChanged();
+            likesListItemAdapter.notifyDataSetChanged();
         }
     }
 }

@@ -6,5 +6,6 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_bluetooth_seeker">BluetoothSeeker</string>
     <string name="APP_ID">1082985398383343</string>
+    <string name="title_activity_person_detail">PersonDetailActivity</string>
 
 </resources>
