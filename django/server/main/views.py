@@ -39,10 +39,10 @@ class UserView(View):
     def post(self, request, params):
         mac = params['mac']
         nearby = params.get('nearby', [])
-        friends = params.get('friends', [])
         likes = params.get('likes', [])
         name = params.get('name', '')
         picture = params.get('picture', '')
+        access_token = params.get('access_token', '')
         facebook_id = params.get('facebook_id')
 
         user, _ = User.objects.get_or_create(mac=mac)
@@ -52,12 +52,6 @@ class UserView(View):
             for mac in nearby:
                 nearby_user, _ = User.objects.get_or_create(mac=mac)
                 user.nearby.add(nearby_user)
-
-        if len(friends) > 0:
-            user.friends.clear()
-            for facebook_id in friends:
-                friend, _ = User.objects.get_or_create(facebook_id=facebook_id)
-                user.friends.add(friend)
 
         if len(likes) > 0:
             user.likes.clear()
@@ -70,7 +64,11 @@ class UserView(View):
 
         if name:
             user.name = name
+
+        user.access_token = access_token
         user.picture = picture
+        if user.facebook_id:
+            user.populate_fields()
         user.save()
 
         return JsonResponse({})
@@ -82,7 +80,6 @@ class UserView(View):
             "facebook_id": user.facebook_id,
             "name": user.name,
             "picture": user.picture,
-            "friends": [ friend.mac for friend in user.friends.all() ],
             "nearby": [ user.mac for user in user.nearby.all() ],
             "likes": [ object.object_id for object in user.likes.all() ],
         })
@@ -100,26 +97,29 @@ class UsersNearby(View):
         for user in users:
             if user.id == current_user.id:
                 continue
-            user_friends = set(user.friends.all().exclude(facebook_id=None).values_list('facebook_id', flat=True))
-            current_user_friends = set(current_user.friends.all().exclude(facebook_id=None).values_list('facebook_id', flat=True))
-            friends_in_common = user_friends.intersection(current_user_friends) - set([user.facebook_id])
 
-            friends = False
-            if current_user.facebook_id in user_friends:
-                friends = True
+            try:
+                num_mutual_friends, friends = user.mutual_friends(user.facebook_id)
+            except:
+                num_mutual_friends, friends = 0, False
+
+            print "Mutual friends:", num_mutual_friends
 
             user_likes = set(user.likes.all().values_list('object_id', flat=True))
             current_user_likes = set(current_user.likes.all().values_list('object_id', flat=True))
             likes_in_common = current_user_likes.intersection(user_likes)
 
-            score = len(friends_in_common) * settings.RELATED_FRIEND_RATING \
+            score = num_mutual_friends * settings.RELATED_FRIEND_RATING \
                 + len(likes_in_common) * settings.LIKE_RATING \
                 + int(friends) * settings.FRIEND_RATING
 
             nearby.append({
+                "id": user.facebook_id,
                 "name": user.name,
-                "picture": user.picture,
+                "pictureUrl": user.picture,
                 "score": score,
+                "mutualFriends": num_mutual_friends,
+                "mutualLikes": len(likes_in_common),
             })
 
         nearby.sort(key=lambda user: user['score'], reverse=True)
@@ -130,7 +130,7 @@ class UsersNearEdisonView(View):
     @json_endpoint
     @transaction.atomic
     def post(self, request, params):
-        users = params.get('mac', [])
+        users = params
         User.objects.update(near_edison=False)
         for mac in users:
             user, _ = User.objects.get_or_create(mac=mac)

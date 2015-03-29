@@ -1,0 +1,73 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ImageView
+        android:id="@+id/person_detail_profile_picture_imageview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_launcher"/>
+
+    <RelativeLayout
+        android:id="@+id/person_detail_info_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/person_detail_profile_picture_imageview">
+
+
+        <RelativeLayout
+            android:id="@+id/person_detail_container_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/person_detail_mutual_friends_left_textivew"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="Mutual friends:"/>
+            <TextView
+                android:id="@+id/person_detail_mutual_likes_left_textivew"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="Mutual likes:"
+                android:layout_below="@id/person_detail_mutual_friends_left_textivew"/>
+            </RelativeLayout>
+
+
+
+        <RelativeLayout
+            android:id="@+id/person_detail_container_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@id/person_detail_container_left">
+            <TextView
+                android:id="@+id/person_detail_mutual_friends_right_textivew"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="10"/>
+            <TextView
+                android:id="@+id/person_detail_mutual_likes_right_textivew"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="20"
+                android:layout_below="@id/person_detail_mutual_friends_right_textivew"/>
+            </RelativeLayout>
+
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/person_detail_likes_listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/person_detail_info_container"
+        android:layout_marginTop="20dp"/>
+
+
+</RelativeLayout>
