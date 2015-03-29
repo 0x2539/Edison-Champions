@@ -76,6 +76,12 @@ USE_L10N = True
 
 USE_TZ = True
 
+if DEBUG:
+    import logging
+    l = logging.getLogger('django.db.backends')
+    l.setLevel(logging.DEBUG)
+    l.addHandler(logging.StreamHandler())
+
 
 LOGGING = {
     'version': 1,
@@ -84,12 +90,20 @@ LOGGING = {
             'level':'DEBUG',
             'class':'logging.StreamHandler',
         },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
     },
     'loggers': {
         'django.request': {
             'handlers':['console'],
             'propagate': True,
             'level':'DEBUG',
+        },
+        'django.db.backends.sqlite3': {
+            'level': 'DEBUG',
+            'handlers': ['console'],
         }
     },
 }

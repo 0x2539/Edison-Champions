@@ -3,14 +3,24 @@ package example.com.finder.Layouts;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import example.com.finder.Adapters.LikesListViewAdapter;
+import example.com.finder.POJO.Person;
 import example.com.finder.R;
+import example.com.finder.Utils.DownloadImageTask;
+import example.com.finder.Utils.NetUtils;
 import example.com.finder.Utils.PeopleUtils;
+import example.com.finder.Utils.SharedPreferencesUtils;
 
 /**
  * Created by Alexandru on 28-Mar-15.
@@ -26,6 +36,11 @@ public class PersonDetailFragLayout extends BaseFragLayout {
     private OnPeopleListFragmentListener listener;
     private View view;
     protected ListView peopleListView;
+    private Button yoButton;
+    private TextView gotYOedTextView;
+    private ImageView profilePictureImageView;
+    private TextView mutualFriendsTextView;
+    private TextView mutualLikesTextView;
 
     private TextView noPeopleTextView;
 
@@ -59,6 +74,67 @@ public class PersonDetailFragLayout extends BaseFragLayout {
         try {
             //noPeopleTextView = (TextView) view.findViewById(R.id.);
             peopleListView = (ListView) view.findViewById(R.id.person_detail_likes_listview);
+            profilePictureImageView = (ImageView) view.findViewById(R.id.person_detail_profile_picture_imageview);
+            gotYOedTextView = (TextView) view.findViewById(R.id.person_detail_you_got_yoed_textview);
+            mutualFriendsTextView = (TextView) view.findViewById(R.id.person_detail_mutual_friends_right_textivew);
+            mutualFriendsTextView.setText(PeopleUtils.getPeople().get(PeopleUtils.getCurrentPersonIndex()).getMutualFriends() + "");
+            mutualLikesTextView = (TextView) view.findViewById(R.id.person_detail_mutual_likes_right_textivew);
+            mutualLikesTextView.setText(PeopleUtils.getPeople().get(PeopleUtils.getCurrentPersonIndex()).getMutualLikes() + "");
+            yoButton = (Button) view.findViewById(R.id.person_detail_yo_button);
+            yoButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String POST_URL = "http://192.168.1.153:8000/yo/";
+                    List<String> keys = new ArrayList<>();
+                    List<String> values = new ArrayList<>();
+                    keys.add("facebook_id");
+                    keys.add("target_facebook_id");
+                    values.add(SharedPreferencesUtils.getFacebookUserId(context));
+                    values.add(PeopleUtils.getPeople().get(PeopleUtils.getCurrentPersonIndex()).getId());
+                    NetUtils.PostData(keys, values, POST_URL);
+
+                    Person p = PeopleUtils.getPeople().get(PeopleUtils.getCurrentPersonIndex());
+                    p.setSentYo(true);
+
+                    PeopleUtils.getPeople().set(PeopleUtils.getCurrentPersonIndex(), p);
+                    yoButton.setVisibility(View.GONE);
+                }
+            });
+
+            if(PeopleUtils.getPeople().get(PeopleUtils.getCurrentPersonIndex()).isSentYo())
+            {
+                yoButton.setVisibility(View.GONE);
+            }
+            else
+            {
+                yoButton.setVisibility(View.VISIBLE);
+            }
+            if(PeopleUtils.getPeople().get(PeopleUtils.getCurrentPersonIndex()).isReceivedYo())
+            {
+                gotYOedTextView.setVisibility(View.VISIBLE);
+            }
+            else
+            {
+                gotYOedTextView.setVisibility(View.GONE);
+            }
+
+            profilePictureImageView.requestFocus();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    DownloadImageTask.getImage(context, profilePictureImageView, PeopleUtils.getPeople().get(PeopleUtils.getCurrentPersonIndex()).getPictureUrl());
+                }
+            }).start();
+            peopleListView.setFocusable(false);
+            peopleListView.setOnTouchListener(new View.OnTouchListener() {
+                // Setting on Touch Listener for handling the touch inside ScrollView
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    // Disallow the touch request for parent scroll on touch of child view
+                    v.getParent().requestDisallowInterceptTouchEvent(true);
+                    return false;
+                }
+            });
             updateView();
         }
         catch (Exception e)
@@ -71,12 +147,12 @@ public class PersonDetailFragLayout extends BaseFragLayout {
     {
         if (likesListItemAdapter == null)
         {
-            likesListItemAdapter = new LikesListViewAdapter(context,
-                    PeopleUtils.getLikes());
+            likesListItemAdapter = new LikesListViewAdapter(context, PeopleUtils.getPeople().get(PeopleUtils.getCurrentPersonIndex()).getLikes());
+//                    PeopleUtils.getLikes());
             peopleListView.setAdapter(likesListItemAdapter);
         } else
         {
-            likesListItemAdapter.setPeople(PeopleUtils.getLikes());
+            likesListItemAdapter.setPeople(PeopleUtils.getPeople().get(PeopleUtils.getCurrentPersonIndex()).getLikes());//PeopleUtils.getLikes());
         }
 
         if(noPeopleTextView != null) {

@@ -11,6 +11,8 @@ import example.com.finder.POJO.Person;
  */
 public class PeopleUtils {
     private static List<Person> people;
+    private static List<Person> peopleYoedBy;
+    private static int currentPersonIndex;
 
     private static List<Like> likes;
 
@@ -47,7 +49,7 @@ public class PeopleUtils {
 
         Like like = new Like();
         like.setName("dj vasile");
-        like.setPictureUrl("http://indyvision.net/wp-content/themes/Minimal/images/logo.png");
+        like.setCategory("muschi");
 
         likes.add(like);
         likes.add(like);
@@ -59,5 +61,40 @@ public class PeopleUtils {
     public static void setLikes(List<Like> likes) {
         // TODO: this
         PeopleUtils.likes = likes;
+    }
+
+    public static int getCurrentPersonIndex() {
+        return currentPersonIndex;
+    }
+
+    public static void setCurrentPersonIndex(int currentPersonIndex) {
+        PeopleUtils.currentPersonIndex = currentPersonIndex;
+    }
+
+    public static List<Person> getPeopleYoedBy() {
+        if(peopleYoedBy == null)
+        {
+            peopleYoedBy = new ArrayList<>();
+        }
+        return peopleYoedBy;
+    }
+
+    public static void setPeopleYoedBy(List<Person> peopleYoedBy) {
+        PeopleUtils.peopleYoedBy = peopleYoedBy;
+    }
+
+    public static void updateYoedPeople(List<Person> people)
+    {
+        for(int i = 0; i < people.size(); i++)
+        {
+            for(int j = 0; j < PeopleUtils.people.size(); j++)
+            {
+                if(people.get(i).getId().equals(PeopleUtils.people.get(j).getId()))
+                {
+                    PeopleUtils.people.set(j, people.get(i));
+                    break;
+                }
+            }
+        }
     }
 }

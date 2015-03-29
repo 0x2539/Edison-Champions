@@ -1,6 +1,7 @@
 package example.com.finder.Activities;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.View;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
+import com.facebook.FacebookActivity;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
@@ -22,12 +24,25 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import example.com.finder.R;
+import example.com.finder.Utils.SharedPreferencesUtils;
+import example.com.finder.Utils.ViewUtils;
 
 
 public class LoginActivity extends ActionBarActivity {
@@ -54,7 +69,7 @@ public class LoginActivity extends ActionBarActivity {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
                         // App code
-                        Log.i("login", "success");
+                        signIn();
                     }
 
                     @Override
@@ -71,49 +86,64 @@ public class LoginActivity extends ActionBarActivity {
 
         final Activity context = this;
 
-        GraphRequestBatch batch = new GraphRequestBatch(
-                GraphRequest.newMeRequest(
-                        AccessToken.getCurrentAccessToken(),
-                        new GraphRequest.GraphJSONObjectCallback() {
-                            @Override
-                            public void onCompleted(
-                                    JSONObject jsonObject,
-                                    GraphResponse response) {
-                                Log.i("myself", jsonObject + "");
-                                // Application code for user
-                            }
-                        }),
-                GraphRequest.newPostRequest(
-                        AccessToken.getCurrentAccessToken(),
-                        "/3003345?fields=context",
-                        null,
-                        new GraphRequest.Callback() {
-                            public void onCompleted(GraphResponse response) {
-                                Log.i("myself2", response + "");
-            /* handle the result */
-                            }
-                        }),
-                GraphRequest.newMyFriendsRequest(
-                        AccessToken.getCurrentAccessToken(),
-                        new GraphRequest.GraphJSONArrayCallback() {
-                            @Override
-                            public void onCompleted(
-                                    JSONArray jsonArray,
-                                    GraphResponse response) {
-                                // Application code for users friends
-                                Log.i("my friends", jsonArray + "");
-                            }
-                        })
-        );
-        batch.addCallback(new GraphRequestBatch.Callback() {
-            @Override
-            public void onBatchCompleted(GraphRequestBatch graphRequests) {
-                // Application code for when the batch finishes
+        try {
+            if (AccessToken.getCurrentAccessToken() != null) {
+                signIn();
             }
-        });
-        batch.executeAsync();
+            else
+            {
+                Log.i("login", "logged out");
+            }
+        }
+        catch (Exception e)
+        {
+            Log.i("login", "logged out");
+            e.printStackTrace();
+        }
 
-        Log.i("token", AccessToken.getCurrentAccessToken().getToken() + "");
+//        GraphRequestBatch batch = new GraphRequestBatch(
+//                GraphRequest.newMeRequest(
+//                        AccessToken.getCurrentAccessToken(),
+//                        new GraphRequest.GraphJSONObjectCallback() {
+//                            @Override
+//                            public void onCompleted(
+//                                    JSONObject jsonObject,
+//                                    GraphResponse response) {
+//                                Log.i("myself", jsonObject + "");
+//                                // Application code for user
+//                            }
+//                        }),
+//                GraphRequest.newPostRequest(
+//                        AccessToken.getCurrentAccessToken(),
+//                        "/3003345?fields=context",
+//                        null,
+//                        new GraphRequest.Callback() {
+//                            public void onCompleted(GraphResponse response) {
+//                                Log.i("myself2", response + "");
+//            /* handle the result */
+//                            }
+//                        }),
+//                GraphRequest.newMyFriendsRequest(
+//                        AccessToken.getCurrentAccessToken(),
+//                        new GraphRequest.GraphJSONArrayCallback() {
+//                            @Override
+//                            public void onCompleted(
+//                                    JSONArray jsonArray,
+//                                    GraphResponse response) {
+//                                // Application code for users friends
+//                                Log.i("my friends", jsonArray + "");
+//                            }
+//                        })
+//        );
+//        batch.addCallback(new GraphRequestBatch.Callback() {
+//            @Override
+//            public void onBatchCompleted(GraphRequestBatch graphRequests) {
+//                // Application code for when the batch finishes
+//            }
+//        });
+//        batch.executeAsync();
+
+        //Log.i("token", AccessToken.getCurrentAccessToken().getToken() + "");
 //        loginButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -121,6 +151,52 @@ public class LoginActivity extends ActionBarActivity {
 //                LoginManager.getInstance().logInWithReadPermissions(context, Arrays.asList("public_profile", "user_friends"));
 //            }
 //        });
+    }
+
+    private void signIn()
+    {
+        Log.i("login", "logged in");
+        SharedPreferencesUtils.addFacebookData(this, AccessToken.getCurrentAccessToken().getUserId(), AccessToken.getCurrentAccessToken().getToken(), ViewUtils.getBluetoothMacAddress());
+        PostData();
+        Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
+        myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        LoginActivity.this.startActivity(myIntent);
+    }
+
+    private void PostData()
+    {
+        final Context context = this;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                final String POST_URL = "http://192.168.1.153:8000/user/";
+
+                HttpClient client = new DefaultHttpClient();
+                HttpPost post = new HttpPost(POST_URL);
+
+                try {
+                    // Add your data
+                    List<NameValuePair> nameValuePairs = new ArrayList<>();
+                    // TODO: add name, pic url etc here
+                    nameValuePairs.add(new BasicNameValuePair("mac", SharedPreferencesUtils.getFacebookMacAddress(context)));
+                    nameValuePairs.add(new BasicNameValuePair("access_token", SharedPreferencesUtils.getFacebookAccessToken(context)));
+                    nameValuePairs.add(new BasicNameValuePair("facebook_id", SharedPreferencesUtils.getFacebookUserId(context)));
+                    post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                    // Execute HTTP Post Request
+                    HttpResponse response = client.execute(post);
+
+                    //TODO: check if response is good
+
+                } catch (ClientProtocolException e) {
+                    Log.e("server", "Client protocol ex");
+                } catch (IOException e) {
+                    Log.e("server", "io ex");
+                }
+
+            }
+        }).start();
     }
 
     @Override

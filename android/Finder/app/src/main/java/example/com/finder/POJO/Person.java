@@ -1,5 +1,7 @@
 package example.com.finder.POJO;
 
+import java.util.List;
+
 /**
  * Created by Alexandru on 28-Mar-15.
  */
@@ -10,6 +12,9 @@ public class Person {
     private int mutualFriends;
     private int mutualLikes;
     private int score;
+    private boolean sentYo;
+    private boolean receivedYo;
+    private List<Like> likes;
 
     public String getName() {
         return name;
@@ -57,5 +62,29 @@ public class Person {
 
     public void setScore(int score) {
         this.score = score;
+    }
+
+    public boolean isSentYo() {
+        return sentYo;
+    }
+
+    public void setSentYo(boolean sentYo) {
+        this.sentYo = sentYo;
+    }
+
+    public boolean isReceivedYo() {
+        return receivedYo;
+    }
+
+    public void setReceivedYo(boolean receivedYo) {
+        this.receivedYo = receivedYo;
+    }
+
+    public List<Like> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(List<Like> likes) {
+        this.likes = likes;
     }
 }

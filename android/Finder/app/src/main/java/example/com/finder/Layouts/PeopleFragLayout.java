@@ -92,7 +92,7 @@ public class PeopleFragLayout extends BaseFragLayout {
             } else {
                 noPeopleTextView.setVisibility(View.GONE);
             }
-            peopleListItemAdapter.notifyDataSetChanged();
         }
+        peopleListItemAdapter.notifyDataSetChanged();
     }
 }
