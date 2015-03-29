@@ -3,6 +3,7 @@ package example.com.finder.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Layout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,6 +27,7 @@ import example.com.finder.Layouts.PeopleFragLayout;
 import example.com.finder.POJO.Person;
 import example.com.finder.R;
 import example.com.finder.Utils.JSONUtils;
+import example.com.finder.Utils.NetUtils;
 import example.com.finder.Utils.PeopleUtils;
 import example.com.finder.Utils.ViewUtils;
 
@@ -63,6 +65,37 @@ public class PeopleActivity extends ActionBarActivity implements PeopleFragLayou
                 });
             }
         });
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String json = "";
+                while (true)
+                {
+                    json = "";
+                    while (json.equals(""))
+                    {
+                        json = NetUtils.GetData("http://localhost:8000/yo/");
+                    }
+
+                    PeopleUtils.setPeopleYoedBy(JSONUtils.fromJSON(json, new TypeReference<List<Person>>() {
+                    }));
+                    PeopleUtils.updateYoedPeople(PeopleUtils.getPeopleYoedBy());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            layout.updateView();
+                        }
+                    });
+
+                    try {
+                        Thread.sleep(10 * 1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
 //        layout = new PeopleFragLayout();
 //        setContentView(layout);
     }

@@ -7,9 +7,8 @@ import android.graphics.Bitmap;
  */
 public class Like {
     private String name;
+    private String category;
 
-    private String pictureUrl;
-    private Bitmap picture;
 
     public String getName() {
         return name;
@@ -19,19 +18,11 @@ public class Like {
         this.name = name;
     }
 
-    public Bitmap getPicture() {
-        return picture;
+    public String getCategory() {
+        return category;
     }
 
-    public void setPicture(Bitmap picture) {
-        this.picture = picture;
-    }
-
-    public String getPictureUrl() {
-        return pictureUrl;
-    }
-
-    public void setPictureUrl(String pictureUrl) {
-        this.pictureUrl = pictureUrl;
+    public void setCategory(String category) {
+        this.category = category;
     }
 }

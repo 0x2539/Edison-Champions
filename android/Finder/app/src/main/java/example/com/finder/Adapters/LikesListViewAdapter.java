@@ -39,7 +39,7 @@ public class LikesListViewAdapter extends BaseAdapter {
      */
     private static class ViewHolder {
         TextView nameTextView;
-        RoundImageView pictureImageView;
+        TextView categoryTextView;
     }
 
     public LikesListViewAdapter(Context context, List<Like> items) {
@@ -63,7 +63,7 @@ public class LikesListViewAdapter extends BaseAdapter {
             holder = new ViewHolder();
 
             holder.nameTextView = (TextView) convertView.findViewById(R.id.like_item_layout_name_text_view);
-            holder.pictureImageView = (RoundImageView) convertView.findViewById(R.id.like_item_layout_profile_picture_image_view);
+            holder.categoryTextView = (TextView) convertView.findViewById(R.id.like_item_layout_category_text_view);
 
             convertView.setTag(holder);
         } else {
@@ -71,13 +71,7 @@ public class LikesListViewAdapter extends BaseAdapter {
         }
 
         holder.nameTextView.setText(items.get(position).getName());
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Log.d("picture url", items.get(position).getPictureUrl());
-                DownloadImageTask.getImage(context, holder.pictureImageView, items.get(position).getPictureUrl());
-            }
-        }).start();
+        holder.categoryTextView.setText(items.get(position).getCategory());
 //        holder.theSubtitleTextView.setText("Item #" + position);
 
         return convertView;

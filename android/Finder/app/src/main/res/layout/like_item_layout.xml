@@ -1,26 +1,29 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="60dp">
+    android:layout_height="60dp"
+    android:paddingLeft="20dp">
 
-    <example.com.finder.Layouts.RoundImageView
-        android:id="@+id/like_item_layout_profile_picture_image_view"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/ic_launcher"
-        android:layout_marginLeft="10dp"
-        android:layout_centerVertical="true"/>
-
-    <TextView
-        android:id="@+id/like_item_layout_name_text_view"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:textColor="@android:color/black"
-        android:text="Nume"
-        android:layout_toRightOf="@+id/like_item_layout_profile_picture_image_view"
-        android:layout_centerVertical="true"
-        android:paddingLeft="20dp"/>
+        android:layout_centerVertical="true">
+        <TextView
+            android:id="@+id/like_item_layout_name_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor="@android:color/black"
+            android:text="Nume"/>
 
+        <TextView
+            android:id="@+id/like_item_layout_category_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:layout_alignLeft="@+id/like_item_layout_name_text_view"
+            android:layout_below="@+id/like_item_layout_name_text_view"
+            android:text="category"/>
+    </RelativeLayout>
 
 </RelativeLayout>
