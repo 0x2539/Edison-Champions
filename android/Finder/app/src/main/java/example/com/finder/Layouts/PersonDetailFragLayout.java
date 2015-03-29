@@ -57,8 +57,8 @@ public class PersonDetailFragLayout extends BaseFragLayout {
     private void initAll()
     {
         try {
-            noPeopleTextView = (TextView) view.findViewById(R.id.frag_people_empty_text_view);
-            peopleListView = (ListView) view.findViewById(R.id.frag_people_list_view);
+            //noPeopleTextView = (TextView) view.findViewById(R.id.);
+            peopleListView = (ListView) view.findViewById(R.id.person_detail_likes_listview);
             updateView();
         }
         catch (Exception e)
@@ -81,9 +81,9 @@ public class PersonDetailFragLayout extends BaseFragLayout {
 
         if(noPeopleTextView != null) {
             if (PeopleUtils.getPeople().size() == 0) {
-                noPeopleTextView.setVisibility(View.VISIBLE);
+                //noPeopleTextView.setVisibility(View.VISIBLE);
             } else {
-                noPeopleTextView.setVisibility(View.GONE);
+                //noPeopleTextView.setVisibility(View.GONE);
             }
             likesListItemAdapter.notifyDataSetChanged();
         }
