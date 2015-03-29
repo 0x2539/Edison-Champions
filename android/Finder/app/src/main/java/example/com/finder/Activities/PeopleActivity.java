@@ -86,10 +86,11 @@ public class PeopleActivity extends ActionBarActivity implements PeopleFragLayou
                 String json = "";
                 while (true)
                 {
+                    final String GET_URL = "http://192.168.1.153:8000/users_nearby/?mac=" + SharedPreferencesUtils.getFacebookMacAddress(getApplicationContext());
                     json = "";
                     while (json.equals(""))
                     {
-                        json = NetUtils.GetData("http://192.168.1.153:8000/yo?facebook_id="+SharedPreferencesUtils.getFacebookUserId(getApplicationContext()));
+                        json = NetUtils.GetData(GET_URL);//"http://192.168.1.153:8000/yo?facebook_id="+SharedPreferencesUtils.getFacebookUserId(getApplicationContext()));
                     }
 
                     PeopleUtils.setPeopleYoedBy(JSONUtils.fromJSON(json, new TypeReference<List<Person>>() {

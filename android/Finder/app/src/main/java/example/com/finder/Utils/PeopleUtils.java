@@ -92,6 +92,7 @@ public class PeopleUtils {
                 if(people.get(i).getId().equals(PeopleUtils.people.get(j).getId()))
                 {
                     PeopleUtils.people.set(j, people.get(i));
+                    break;
                 }
             }
         }
