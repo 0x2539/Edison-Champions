@@ -3,6 +3,7 @@ package example.com.finder.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import example.com.finder.POJO.Like;
 import example.com.finder.POJO.Person;
 
 /**
@@ -10,6 +11,9 @@ import example.com.finder.POJO.Person;
  */
 public class PeopleUtils {
     private static List<Person> people;
+
+    private static List<Like> likes;
+
     public static List<Person> getPeople()
     {
 //        List<Person> people = new ArrayList<>();
@@ -25,11 +29,35 @@ public class PeopleUtils {
 //        people.add(p);
 //        people.add(p);
 
+        if(people == null)
+        {
+            people = new ArrayList<>();
+        }
+
         return people;
     }
 
     public static void setPeople(List<Person> peopleList)
     {
         people = peopleList;
+    }
+
+    public static List<Like> getLikes() {
+        likes = new ArrayList<>();
+
+        Like like = new Like();
+        like.setName("dj vasile");
+        like.setPictureUrl("http://indyvision.net/wp-content/themes/Minimal/images/logo.png");
+
+        likes.add(like);
+        likes.add(like);
+        likes.add(like);
+
+        return likes;
+    }
+
+    public static void setLikes(List<Like> likes) {
+        // TODO: this
+        PeopleUtils.likes = likes;
     }
 }

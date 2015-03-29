@@ -2,10 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="example.com.finder" >
 
-    <!--Needed for general bluetooth-->
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <!--Needed for bluetooth device discovery-->
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <!-- Needed for general bluetooth -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <!-- Needed for bluetooth device discovery -->
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -39,11 +39,20 @@
             android:label="@string/app_name" >
         </activity>
 
-        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/APP_ID"/>
-        <meta-data android:name="com.facebook.sdk.ApplicationName" android:value="@string/app_name"/>
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/APP_ID" />
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationName"
+            android:value="@string/app_name" />
+
         <activity
             android:name="com.facebook.FacebookActivity"
             android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".Activities.PersonDetailActivity"
+            android:label="@string/title_activity_person_detail" >
         </activity>
     </application>
 
