@@ -1,6 +1,7 @@
 package example.com.finder.Adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,7 +74,8 @@ public class LikesListViewAdapter extends BaseAdapter {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                DownloadImageTask.getImage(holder.pictureImageView, items.get(position).getPictureUrl());
+                Log.d("picture url", items.get(position).getPictureUrl());
+                DownloadImageTask.getImage(context, holder.pictureImageView, items.get(position).getPictureUrl());
             }
         }).start();
 //        holder.theSubtitleTextView.setText("Item #" + position);

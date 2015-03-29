@@ -8,7 +8,7 @@ import android.view.MenuItem;
 import example.com.finder.Layouts.PersonDetailFragLayout;
 import example.com.finder.R;
 
-public class PersonDetailActivity extends ActionBarActivity {
+public class PersonDetailActivity extends ActionBarActivity implements PersonDetailFragLayout.OnPeopleListFragmentListener {
 
     PersonDetailFragLayout layout;
 
@@ -18,7 +18,6 @@ public class PersonDetailActivity extends ActionBarActivity {
         setContentView(R.layout.activity_person_detail);
 
         layout = (PersonDetailFragLayout) getSupportFragmentManager().findFragmentById(R.id.person_detail_fragment);
-
     }
 
 
@@ -45,5 +44,8 @@ public class PersonDetailActivity extends ActionBarActivity {
     }
 
 
+    @Override
+    public void onPersonClicked(int position) {
 
+    }
 }
