@@ -4,7 +4,7 @@ from django.views.generic import View
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.utils import timezone
-from django.db import transaction
+from django.db import IntegrityError
 from .models import Ding, User, FacebookObject
 import time
 from .util import json_endpoint
@@ -35,10 +35,13 @@ class DingView(View):
 class UserView(View):
     @json_endpoint
     @csrf_exempt
-    @transaction.atomic
     def post(self, request, params):
         mac = params['mac']
+
         nearby = params.get('nearby', [])
+        if isinstance(nearby, str) or isinstance(nearby, unicode):
+            nearby = nearby.split(',')
+
         likes = params.get('likes', [])
         name = params.get('name', '')
         picture = params.get('picture', '')
@@ -49,15 +52,13 @@ class UserView(View):
 
         if len(nearby) > 0:
             user.nearby.clear()
-            for mac in nearby:
-                nearby_user, _ = User.objects.get_or_create(mac=mac)
-                user.nearby.add(nearby_user)
-
-        if len(likes) > 0:
-            user.likes.clear()
-            for facebook_object in likes:
-                object, _ = FacebookObject.objects.get_or_create(object_id=facebook_object)
-                user.likes.add(object)
+            for nearby_mac in nearby:
+                nearby_user, _ = User.objects.get_or_create(mac=nearby_mac)
+                nearby_user.save()
+                try:
+                    user.nearby.add(nearby_user)
+                except IntegrityError:
+                    pass
 
         if facebook_id:
             user.facebook_id = facebook_id
@@ -65,9 +66,14 @@ class UserView(View):
         if name:
             user.name = name
 
-        user.access_token = access_token
-        user.picture = picture
-        if user.facebook_id:
+        if access_token:
+            user.access_token = access_token
+
+        if picture:
+            user.picture = picture
+
+        if facebook_id:
+            User.objects.filter(facebook_id=facebook_id).exclude(id=user.id).delete()
             user.populate_fields()
         user.save()
 
@@ -99,15 +105,13 @@ class UsersNearby(View):
         nearby = []
 
         for user in users:
-            if user.id == current_user.id:
+            if user.facebook_id == current_user.facebook_id:
                 continue
 
             try:
-                num_mutual_friends, friends = user.mutual_friends(user.facebook_id)
+                num_mutual_friends, friends = user.mutual_friends(current_user.facebook_id)
             except:
                 num_mutual_friends, friends = 0, False
-
-            print "Mutual friends:", num_mutual_friends
 
             user_likes = set(user.likes.all().values_list('object_id', flat=True))
             current_user_likes = set(current_user.likes.all().values_list('object_id', flat=True))
@@ -137,7 +141,6 @@ class UsersNearby(View):
 
 class UsersNearEdisonView(View):
     @json_endpoint
-    @transaction.atomic
     def post(self, request, params):
         users = params
         User.objects.update(near_edison=False)
@@ -177,6 +180,10 @@ class YoView(View):
     def get(self, request):
         user = get_object_or_404(User, facebook_id=request.GET.get('facebook_id'))
         yos = list(user.yos_received.all().values())
+        for u in yos:
+            u['sentYo'] = user.yos.filter(facebook_id=user.facebook_id).exists()
+            u['receivedYo'] = True
+
         return JsonResponse(yos, safe=False)
 
 
