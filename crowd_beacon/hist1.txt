@@ -1,0 +1,205 @@
+    1  ifconfig
+    2  ping www.google.com
+    3  ping www.google.com
+    4  systemctl status wyliodrin-server
+    5  systemctl status wyliodrin-server
+    6  systemctl status wyliodrin-server
+    7  systemctl status wyliodrin-server
+    8  curl
+    9  passwd
+   10  hcitool 
+   11  hcitool lescan
+   12  hcitool hci0 lescan
+   13  hcitool 
+   14  hcitool --help
+   15  hciconfig
+   16  hcitool lescan
+   17  rfkill unblock bluetooth
+   18  hcitool lescan
+   19  ifconfig -a
+   20  pwd
+   21  crontab
+   22  cron
+   23  opkg crontab
+   24  opkg search '*cron'
+   25  opkg search '*cron*'
+   26  opkg search 'cron'
+   27  ps aux
+   28  ps
+   29  timeout
+   30  hcitool 
+   31  hcitool lescan --help
+   32  hcitool lescan --passive
+   33  hcitool lescan --passive
+   34  hcitool lescan
+   35  hcitool scan
+   36  opkg mc
+   37  opkg search '*mc'
+   38  vi
+   39  pwd
+   40  mkdir crodw_beacon
+   41  mv crodw_beacon/ crowd_beacon
+   42  touch pre.sh
+   43  vi pre.sh 
+   44  chmod +x pre.sh 
+   45  ./pre.sh 
+   46  ifconfig -a
+   47  ping www.yahoo.com
+   48  ping www.yahoo.com
+   49  ping www.yahoo.com
+   50  ifconfig -a
+   51  ifconfig wlan0 down
+   52  ifconfig wlan0 up
+   53  ping www.yahoo.com
+   54  ping 192.168.2.1
+   55  df -h
+   56  ls /home/
+   57  find | grep rares
+   58  find / | grep rares
+   59  configure_edison 
+   60  configure_edison --wifi
+   61  ifconfig -a
+   62  configure_edison --wifi
+   63  configure_edison 
+   64  configure_edison --setup
+   65  ifconfig -a
+   66  ping www.yahoo.com
+   67  opkg mc
+   68  opkg search 'cron'
+   69  opkg search '*cron;
+   70  opkg search '*cron'
+   71  opkg search 'cron*'
+   72  opkg search 'cron'
+   73  opkg search 'crontab'
+   74  opkg install mc
+   75  reboot
+   76  mc
+   77  exit
+   78  clear
+   79  pwd
+   80  cd crowd_beacon/
+   81  ifconfig -a
+   82  pwd
+   83  scp -R /home/root/crowd_beacon/ root@192.168.1.190:/home/rape
+   84  scp -r /home/root/crowd_beacon/ root@192.168.1.190:/home/rape
+   85  scp -r /home/root/crowd_beacon/ root@192.168.1.190:/home/rape
+   86  scp -r /home/root/crowd_beacon/ root@192.168.1.190:/home/rape
+   87  scp -r /home/root/crowd_beacon/ rape@192.168.1.190:/home/rape
+   88  pwd
+   89  ls
+   90  cd ..
+   91  ls
+   92  mv pre.sh crowd_beacon/
+   93  cd crowd_beacon/
+   94  ls
+   95  scp -r /home/root/crowd_beacon/ root@192.168.1.190:/home/rape
+   96  scp -r /home/root/crowd_beacon/ rape@192.168.1.190:/home/rape
+   97  history 
+   98  history > file
+   99  vi fil
+  100  vi file 
+  101  which rfkill
+  102  hcitool lescan
+  103  hcitool lescan
+  104  pwd
+  105  ls
+  106  ls
+  107  chmod +x get_crowd.sh 
+  108  ./get_crowd.sh 
+  109  hcitool lescan
+  110  wget http://repo.opkg.net/edison/repo/core2-32/cronie_1.4.11-r0_core2-32.ipk
+  111  opkg install cronie_1.4.11-r0_core2-32.ipk 
+  112  crontab -l
+  113  hcitool lescan
+  114  ./get_crowd.sh 
+  115  pwd
+  116  ls -al
+  117  ./timeoutcwd.sh -t 2 hcitool lescan
+  118  ./timeoutcwd.sh -t 2 'hcitool lescan'
+  119  ./timeout.sh 'hcitool lescan'
+  120  ./timeout.sh -t 3 'hcitool lescan'
+  121  clear
+  122  date
+  123  hcitool lescan
+  124  history | rf
+  125  history | grep rf
+  126  rfkill unblock bluetooth
+  127  hcitool lescan
+  128  ps
+  129  reboot
+  130  ifconfig a-
+  131  ifconfig -a
+  132  cd crowd
+  133  cd crowd_beacon/
+  134  hcitool lescan
+  135  rfkill unblock bluetooth
+  136  hcitool lescan
+  137  history | grep cronie
+  138  wget wget http://repo.opkg.net/edison/repo/core2-32/coreutils-dbg_8.22-r0_core2-32.ipk 
+  139  opkg install coreutils-dbg_8.22-r0_core2-32.ipk 
+  140  opkg update
+  141  opkg install coreutils-dbg_8.22-r0_core2-32.ipk 
+  142  flashall.sh
+  143  find / | grep flashall
+  144  /media/storage/flashall.sh
+  145  opkg
+  146  clear
+  147  hcitool lescan
+  148  hcitool lescan --passive
+  149  hcitool lescan --passive --discovery=l
+  150  hcitool lescan --passive --discovery=g
+  151  crontab -l
+  152  crontab -e
+  153  crontab -l
+  154  pwd
+  155  ls
+  156  rm -rf cronie_1.4.11-r0_core2-32.ipk 
+  157  df -h
+  158  watch
+  159  rm -rf coreutils-dbg_8.22-r0_core2-32.ipk 
+  160  ls
+  161  df -h
+  162  cd ..
+  163  cp -R crowd_beacon/ /home/
+  164  cd /home/
+  165  ls
+  166  cd crowd_beacon/
+  167  pwd
+  168  ls
+  169  cat list.txt 
+  170  vi pre.sh 
+  171  ls
+  172  vi get_crowd.sh 
+  173  cp pre.sh hook1m.sh
+  174  pwd
+  175  crontab -e
+  176  vi hook1m.sh 
+  177  tail -f /home/crowd_beacon/list.txt 
+  178  ls /home/crowd_beacon/list.txt
+  179  ls -al /home/crowd_beacon/list.txt
+  180  cat /home/crowd_beacon/list.txt
+  181  scp -r /home/crowd_beacon/ rape@192.168.1.190:/home/rape/
+  182  scp -r /home/crowd_beacon/ rape@192.168.1.190:/home/rape/
+  183  ls -al hook1m.sh 
+  184  chmod 777 hook1m.sh 
+  185  echo 'x' >> /home/crowd_beacon/list.txt 
+  186  echo 'x' >> /home/crowd_beacon/list.txt 
+  187  echo 'x' >> /home/crowd_beacon/list.txt 
+  188  cat /home/crowd_beacon/list.txt 
+  189  crontab -e
+  190  ifconfig -a
+  191  cat /home/crowd_beacon/list.txt 
+  192  vi hook1m.sh 
+  193  cat /home/crowd_beacon/list.txt 
+  194  cat /home/crowd_beacon/list.txt 
+  195  clear
+  196  hcitool lescan --duplicate
+  197  hcitool lescan --passive --duplicate
+  198  cat /home/crowd_beacon/list.txt 
+  199  cat /home/crowd_beacon/list.txt 
+  200  cat /home/crowd_beacon/list.txt 
+  201  ls -al /home/crowd_beacon/list.txt 
+  202  daate
+  203  date
+  204  history
+  205  history > hist1.txt

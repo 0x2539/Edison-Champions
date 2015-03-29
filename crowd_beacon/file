@@ -1,0 +1,96 @@
+    1  ifconfig
+    2  ping www.google.com
+    3  ping www.google.com
+    4  systemctl status wyliodrin-server
+    5  systemctl status wyliodrin-server
+    6  systemctl status wyliodrin-server
+    7  systemctl status wyliodrin-server
+    8  curl
+    9  passwd
+   10  hcitool 
+   11  hcitool lescan
+   12  hcitool hci0 lescan
+   13  hcitool 
+   14  hcitool --help
+   15  hciconfig
+   16  hcitool lescan
+   17  rfkill unblock bluetooth
+   18  hcitool lescan
+   19  ifconfig -a
+   20  pwd
+   21  crontab
+   22  cron
+   23  opkg crontab
+   24  opkg search '*cron'
+   25  opkg search '*cron*'
+   26  opkg search 'cron'
+   27  ps aux
+   28  ps
+   29  timeout
+   30  hcitool 
+   31  hcitool lescan --help
+   32  hcitool lescan --passive
+   33  hcitool lescan --passive
+   34  hcitool lescan
+   35  hcitool scan
+   36  opkg mc
+   37  opkg search '*mc'
+   38  vi
+   39  pwd
+   40  mkdir crodw_beacon
+   41  mv crodw_beacon/ crowd_beacon
+   42  touch pre.sh
+   43  vi pre.sh 
+   44  chmod +x pre.sh 
+   45  ./pre.sh 
+   46  ifconfig -a
+   47  ping www.yahoo.com
+   48  ping www.yahoo.com
+   49  ping www.yahoo.com
+   50  ifconfig -a
+   51  ifconfig wlan0 down
+   52  ifconfig wlan0 up
+   53  ping www.yahoo.com
+   54  ping 192.168.2.1
+   55  df -h
+   56  ls /home/
+   57  find | grep rares
+   58  find / | grep rares
+   59  configure_edison 
+   60  configure_edison --wifi
+   61  ifconfig -a
+   62  configure_edison --wifi
+   63  configure_edison 
+   64  configure_edison --setup
+   65  ifconfig -a
+   66  ping www.yahoo.com
+   67  opkg mc
+   68  opkg search 'cron'
+   69  opkg search '*cron;
+   70  opkg search '*cron'
+   71  opkg search 'cron*'
+   72  opkg search 'cron'
+   73  opkg search 'crontab'
+   74  opkg install mc
+   75  reboot
+   76  clear
+   77  pwd
+   78  cd crowd_beacon/
+   79  ifconfig -a
+   80  pwd
+   81  scp -R /home/root/crowd_beacon/ root@192.168.1.190:/home/rape
+   82  scp -r /home/root/crowd_beacon/ root@192.168.1.190:/home/rape
+   83  scp -r /home/root/crowd_beacon/ root@192.168.1.190:/home/rape
+   84  scp -r /home/root/crowd_beacon/ root@192.168.1.190:/home/rape
+   85  scp -r /home/root/crowd_beacon/ rape@192.168.1.190:/home/rape
+   86  pwd
+   87  ls
+   88  cd ..
+   89  ls
+   90  mv pre.sh crowd_beacon/
+   91  cd crowd_beacon/
+   92  ls
+   93  scp -r /home/root/crowd_beacon/ root@192.168.1.190:/home/rape
+   94  scp -r /home/root/crowd_beacon/ rape@192.168.1.190:/home/rape
+   95  history 
+   96  history > file
