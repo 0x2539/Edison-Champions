@@ -15,6 +15,7 @@ class User(models.Model):
     picture = models.URLField()
     name = models.CharField(max_length=128)
     nearby = models.ManyToManyField('self', symmetrical=True)
+    yos = models.ManyToManyField('self', symmetrical=False, related_name="yos_received")
     near_edison = models.BooleanField(default=False)
     access_token = models.CharField(max_length=512)
 
@@ -35,7 +36,11 @@ class User(models.Model):
         likes_page = graph.get_connections('me', 'likes')
         likes = []
         while True:
-            likes.extend([object['id'] for object in likes_page['data']])
+            likes.extend([{
+                "object_id": object['id'],
+                "name": object.get('name', ''),
+                "category": object.get('category', ''),
+            } for object in likes_page['data']])
             if len(likes_page['data']) == 0:
                 break
 
@@ -45,8 +50,11 @@ class User(models.Model):
                 break
 
         self.likes.clear()
-        for object_id in likes:
-            object, _ = FacebookObject.objects.get_or_create(object_id=object_id)
+        for data in likes:
+            object, _ = FacebookObject.objects.get_or_create(object_id=data['object_id'])
+            object.name = data['name']
+            object.category = data['category']
+            object.save()
             self.likes.add(object)
 
         # populate name and picture
@@ -58,3 +66,6 @@ class User(models.Model):
 
 class FacebookObject(models.Model):
     object_id = models.CharField(max_length=64, primary_key=True)
+    name = models.CharField(max_length=128)
+    category = models.CharField(max_length=128)
+    picture = models.URLField()

@@ -75,14 +75,16 @@ class UserView(View):
 
     def get(self, request):
         user = get_object_or_404(User, mac=request.GET.get('mac'))
-        return JsonResponse({
+        data = {
             "mac": user.mac,
             "facebook_id": user.facebook_id,
             "name": user.name,
             "picture": user.picture,
-            "nearby": [ user.mac for user in user.nearby.all() ],
-            "likes": [ object.object_id for object in user.likes.all() ],
-        })
+            "nearby": [ u.mac for u in user.nearby.all() ],
+            "likes": [ { 'name': o.name, 'category': o.category } for o in user.likes.all() ],
+        }
+
+        return JsonResponse(data, safe=False)
 
 
 class UsersNearby(View):
@@ -92,6 +94,8 @@ class UsersNearby(View):
 
         users = list(User.objects.filter(near_edison=True))
         current_user = User.objects.get(mac=request.GET['mac'])
+        yos_sent = current_user.yos.values_list('facebook_id', flat=True)
+        yos_received = current_user.yos_received.values_list('facebook_id', flat=True)
         nearby = []
 
         for user in users:
@@ -109,6 +113,8 @@ class UsersNearby(View):
             current_user_likes = set(current_user.likes.all().values_list('object_id', flat=True))
             likes_in_common = current_user_likes.intersection(user_likes)
 
+            likes = FacebookObject.objects.filter(object_id__in=likes_in_common)
+
             score = num_mutual_friends * settings.RELATED_FRIEND_RATING \
                 + len(likes_in_common) * settings.LIKE_RATING \
                 + int(friends) * settings.FRIEND_RATING
@@ -120,6 +126,9 @@ class UsersNearby(View):
                 "score": score,
                 "mutualFriends": num_mutual_friends,
                 "mutualLikes": len(likes_in_common),
+                "sentYo": user.facebook_id in yos_sent,
+                "receivedYo": user.facebook_id in yos_received,
+                "likes": [ { 'name': o.name, 'category': o.category } for o in likes ],
             })
 
         nearby.sort(key=lambda user: user['score'], reverse=True)
@@ -163,3 +172,17 @@ class LevelView(View):
         return JsonResponse({
             "level": level,
         })
+
+class YoView(View):
+    def get(self, request):
+        user = get_object_or_404(User, facebook_id=request.GET.get('facebook_id'))
+        yos = list(user.yos_received.all().values())
+        return JsonResponse(yos, safe=False)
+
+
+    @json_endpoint
+    @csrf_exempt
+    def post(self, request, params):
+        user = get_object_or_404(User, facebook_id=params.get('facebook_id'))
+        user.yos.add(get_object_or_404(User, facebook_id=params.get('target_facebook_id')))
+        return JsonResponse({})
