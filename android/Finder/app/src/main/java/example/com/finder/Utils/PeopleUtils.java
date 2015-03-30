@@ -3,6 +3,7 @@ package example.com.finder.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import example.com.finder.POJO.Event;
 import example.com.finder.POJO.Like;
 import example.com.finder.POJO.Person;
 
@@ -12,6 +13,7 @@ import example.com.finder.POJO.Person;
 public class PeopleUtils {
     private static List<Person> people;
     private static List<Person> peopleYoedBy;
+    private static List<Event> events;
     private static int currentPersonIndex;
 
     private static List<Like> likes;
@@ -89,12 +91,26 @@ public class PeopleUtils {
         {
             for(int j = 0; j < PeopleUtils.people.size(); j++)
             {
-                if(people.get(i).getId().equals(PeopleUtils.people.get(j).getId()))
+                if(people.get(i).getId() != null && PeopleUtils.people.get(j).getId() != null && people.get(i).getId().equals(PeopleUtils.people.get(j).getId()))
                 {
                     PeopleUtils.people.set(j, people.get(i));
                     break;
                 }
             }
         }
+    }
+
+    public static List<Event> getEvents() {
+        events = new ArrayList<>();
+        Event event = new Event();
+        event.setEventName("My event");
+        events.add(event);
+        events.add(event);
+        events.add(event);
+        return events;
+    }
+
+    public static void setEvents(List<Event> events) {
+        PeopleUtils.events = events;
     }
 }

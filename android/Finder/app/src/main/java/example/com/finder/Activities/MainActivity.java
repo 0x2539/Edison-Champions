@@ -32,6 +32,7 @@ public class MainActivity extends ActionBarActivity {
         GoToPeopleActivity();
         GoToFacebookActivity();
         GoToServerActivity();
+        GoToEventsActivity();
     }
 
     private void getKeyHash()
@@ -127,6 +128,20 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Intent myIntent = new Intent(MainActivity.this, ServerActivity.class);
+                MainActivity.this.startActivity(myIntent);
+            }
+        });
+
+    }
+
+    public void GoToEventsActivity ()
+    {
+        Button button = (Button)findViewById(R.id.events_activity_button);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(MainActivity.this, EventsActivity.class);
                 MainActivity.this.startActivity(myIntent);
             }
         });

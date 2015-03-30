@@ -14,6 +14,8 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 
+import example.com.finder.R;
+
 /**
  * Created by Alexandru on 21-Feb-15.
  */
@@ -34,7 +36,7 @@ public abstract class DownloadImageTask {//extends AsyncTask<String, Void, Bitma
         }
     }
 
-    public static void getImage(Context context, final ImageView imageView, final String imageUrl) {
+    public static void getImage(final Context context, final ImageView imageView, final String imageUrl) {
         if(profilePictures.get(imageUrl) != null)
         {
             ((Activity)context).runOnUiThread(new Runnable() {
@@ -53,6 +55,12 @@ public abstract class DownloadImageTask {//extends AsyncTask<String, Void, Bitma
 
             if(imageUrl.equals(""))
             {
+                ((Activity)context).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_launcher));
+                    }
+                });
                 return;
             }
             Log.i("getImage", "url " + imageUrl);
@@ -70,6 +78,14 @@ public abstract class DownloadImageTask {//extends AsyncTask<String, Void, Bitma
                     @Override
                     public void run() {
                         imageView.setImageBitmap(bitmap);
+                    }
+                });
+            }
+            else{
+                ((Activity)context).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_launcher));
                     }
                 });
             }

@@ -38,6 +38,10 @@
             android:name=".Activities.ServerActivity"
             android:label="@string/app_name" >
         </activity>
+        <activity
+            android:name=".Activities.EventsActivity"
+            android:label="@string/app_name" >
+        </activity>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
